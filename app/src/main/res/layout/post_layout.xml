@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="@dimen/avatarSize"
+        android:layout_height="@dimen/avatarSize"
+        android:layout_margin="@dimen/marginDefault"
+        android:contentDescription="@string/description_post_author_avatar"
+        android:src="@drawable/ic_launcher_foreground"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@sample/posts_avatars" />
+
+    <TextView
+        android:id="@+id/author"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/marginDefault"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintBottom_toTopOf="@id/published"
+        app:layout_constraintEnd_toStartOf="@id/menu"
+        app:layout_constraintStart_toEndOf="@id/avatar"
+        app:layout_constraintTop_toTopOf="@id/avatar"
+        tools:text="@sample/posts.json/data/author" />
+
+    <TextView
+        android:id="@+id/published"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/marginDefault"
+        app:layout_constraintBottom_toBottomOf="@id/avatar"
+        app:layout_constraintStart_toEndOf="@id/avatar"
+        app:layout_constraintTop_toBottomOf="@id/author"
+        tools:text="@sample/posts.json/data/published" />
+
+    <ImageButton
+        android:id="@+id/menu"
+        android:layout_width="@dimen/pictureSize"
+        android:layout_height="@dimen/pictureSize"
+        android:layout_marginTop="@dimen/marginDefault"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/description_post_menu"
+        android:src="@drawable/ic_baseline_more_vert_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrierTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="avatar,published,menu" />
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autoLink="web"
+        android:padding="@dimen/marginDefault"
+        app:layout_constraintTop_toTopOf="@id/barrierTop"
+        tools:text="@sample/posts.json/data/content" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrierBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="content" />
+
+    <ImageButton
+        android:id="@+id/likesIcon"
+        android:layout_width="@dimen/pictureSize"
+        android:layout_height="@dimen/pictureSize"
+        android:layout_marginStart="@dimen/marginDefault"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/description_post_likes"
+        android:src="@drawable/ic_baseline_favorite_border_24"
+        app:layout_constraintEnd_toStartOf="@id/likesText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barrierBottom" />
+
+    <TextView
+        android:id="@+id/likesText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/likesIcon"
+        app:layout_constraintEnd_toStartOf="@id/shareIcon"
+        app:layout_constraintStart_toEndOf="@id/likesIcon"
+        app:layout_constraintTop_toTopOf="@id/likesIcon"
+        tools:text="@sample/posts.json/data/likes" />
+
+    <ImageButton
+        android:id="@+id/shareIcon"
+        android:layout_width="@dimen/pictureSize"
+        android:layout_height="@dimen/pictureSize"
+        android:layout_marginStart="@dimen/marginDefault"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/description_post_shares"
+        android:src="@drawable/ic_baseline_share_24"
+        app:layout_constraintEnd_toStartOf="@id/shareText"
+        app:layout_constraintStart_toStartOf="@id/likesText"
+        app:layout_constraintTop_toBottomOf="@id/barrierBottom" />
+
+    <TextView
+        android:id="@+id/shareText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/shareIcon"
+        app:layout_constraintStart_toEndOf="@id/shareIcon"
+        app:layout_constraintTop_toTopOf="@id/shareIcon"
+        tools:text="@sample/posts.json/data/shares" />
+
+    <TextView
+        android:id="@+id/viewsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/marginDefault"
+        app:layout_constraintBottom_toBottomOf="@id/viewsIcon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/viewsIcon"
+        tools:text="@sample/posts.json/data/views" />
+
+    <ImageButton
+        android:id="@+id/viewsIcon"
+        android:layout_width="@dimen/pictureSize"
+        android:layout_height="@dimen/pictureSize"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/description_post_views"
+        android:src="@drawable/ic_baseline_eye_24"
+        app:layout_constraintEnd_toStartOf="@id/viewsText"
+        app:layout_constraintTop_toBottomOf="@id/barrierBottom" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
