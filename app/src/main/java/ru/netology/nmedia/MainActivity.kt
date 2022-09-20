@@ -8,7 +8,6 @@ import ru.netology.nmedia.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
@@ -21,8 +20,7 @@ class MainActivity : AppCompatActivity() {
         )
         binding.list.adapter = adapter
         viewModel.data.observe(this) { posts ->
-          //  adapter.submitList(posts)
-            adapter.list = posts
+            adapter.submitList(posts)
         }
     }
 }
