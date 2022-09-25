@@ -7,4 +7,7 @@
     <string name="description_post_likes">Количество лайков</string>
     <string name="description_post_shares">Количество репостов</string>
     <string name="description_post_views">Количество просмотров</string>
+    <string name="remove">Удалить</string>
+    <string name="post_text">Текст поста</string>
+    <string name="save_post">Сохранить пост</string>
 </resources>

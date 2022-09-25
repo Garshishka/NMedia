@@ -6,4 +6,7 @@
     <string name="description_post_likes">Amount of likes</string>
     <string name="description_post_shares">Amount of shares</string>
     <string name="description_post_views">Amount of views</string>
+    <string name="remove">Remove</string>
+    <string name="post_text">Post text</string>
+    <string name="save_post">Save post</string>
 </resources>
