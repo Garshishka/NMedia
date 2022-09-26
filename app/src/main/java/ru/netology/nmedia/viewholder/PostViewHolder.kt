@@ -1,14 +1,15 @@
-package ru.netology.nmedia
+package ru.netology.nmedia.viewholder
 
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
+import ru.netology.nmedia.Post
+import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.PostLayoutBinding
+
 
 class PostViewHolder(
     private val binding: PostLayoutBinding,
-    private val onLikeListener: OnLikeListener,
-    private val onShareListener: OnShareListener,
-    private val onRemoveListener: OnRemoveListener
+    private val onInteractionListener: OnInteractionListener
 ) : RecyclerView.ViewHolder(binding.root)
 {
     private val likeNotPressed = R.drawable.ic_baseline_favorite_border_24
@@ -21,9 +22,9 @@ class PostViewHolder(
             content.text = post.content
             likesText.text = formattingBigNumbers(post.likesAmount)
             likesIcon.setImageResource(if (post.likedByMe) likePressed else likeNotPressed)
-            likesIcon.setOnClickListener { onLikeListener(post) }
+            likesIcon.setOnClickListener { onInteractionListener.onLike(post)}
             shareText.text = formattingBigNumbers(post.sharesAmount)
-            shareIcon.setOnClickListener { onShareListener(post) }
+            shareIcon.setOnClickListener { onInteractionListener.onShare(post) }
             viewsText.text = formattingBigNumbers(post.views)
 
             menu.setOnClickListener {
@@ -32,7 +33,11 @@ class PostViewHolder(
                     setOnMenuItemClickListener {  item->
                         when (item.itemId){
                             R.id.remove ->{
-                                onRemoveListener(post)
+                                onInteractionListener.onRemove(post)
+                                true
+                            }
+                            R.id.edit ->{
+                                onInteractionListener.onEdit(post)
                                 true
                             }
                             else -> false

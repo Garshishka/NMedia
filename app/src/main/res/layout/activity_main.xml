@@ -29,7 +29,7 @@
         android:id="@+id/content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
+        android:background="@android:color/white"
         android:hint="@string/post_text"
         android:importantForAutofill="no"
         android:inputType="textMultiLine"
@@ -43,7 +43,7 @@
         android:id="@+id/save"
         android:layout_width="@dimen/pictureSize"
         android:layout_height="@dimen/pictureSize"
-        android:background="@android:color/transparent"
+        android:background="@android:color/white"
         android:contentDescription="@string/save_post"
         android:src="@drawable/ic_baseline_check_circle_outline_24"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -51,7 +51,30 @@
         app:layout_constraintStart_toEndOf="@id/content"
         app:layout_constraintTop_toBottomOf="@id/toolsTop" />
 
+    <TextView
+        android:id="@+id/contentDescriptor"
+        android:background="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/descriptor_size"
+        android:text="@string/editing_post"
+        android:textAlignment="center"
+        android:textSize="@dimen/descriptor_text_size"
+        app:layout_constraintBottom_toTopOf="@id/content"
+        android:visibility="gone"
+        />
 
+    <ImageButton
+        android:id="@+id/closeEdit"
+        android:layout_width="@dimen/pictureSize"
+        android:layout_height="@dimen/pictureSize"
+        android:contentDescription="@string/close_edit"
+        android:src="@drawable/ic_baseline_close_24"
+        android:background="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/contentDescriptor"
+        app:layout_constraintBottom_toBottomOf="@id/contentDescriptor"
+        android:visibility="gone"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

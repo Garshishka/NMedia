@@ -9,4 +9,7 @@
     <string name="remove">Remove</string>
     <string name="post_text">Post text</string>
     <string name="save_post">Save post</string>
+    <string name="edit">Edit</string>
+    <string name="close_edit">Close edit</string>
+    <string name="editing_post">Editing post</string>
 </resources>

@@ -10,4 +10,7 @@
     <string name="remove">Удалить</string>
     <string name="post_text">Текст поста</string>
     <string name="save_post">Сохранить пост</string>
+    <string name="edit">Редактировать</string>
+    <string name="close_edit">Закрыть редактирование</string>
+    <string name="editing_post">Редактируемое сообщение</string>
 </resources>
