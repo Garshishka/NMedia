@@ -51,6 +51,14 @@
         app:layout_constraintStart_toEndOf="@id/content"
         app:layout_constraintTop_toBottomOf="@id/toolsTop" />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/contentDescriptorGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="contentDescriptor,closeEdit"
+        />
+
     <TextView
         android:id="@+id/contentDescriptor"
         android:background="@android:color/white"
@@ -60,7 +68,6 @@
         android:textAlignment="center"
         android:textSize="@dimen/descriptor_text_size"
         app:layout_constraintBottom_toTopOf="@id/content"
-        android:visibility="gone"
         />
 
     <ImageButton
@@ -73,7 +80,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/contentDescriptor"
         app:layout_constraintBottom_toBottomOf="@id/contentDescriptor"
-        android:visibility="gone"
         />
 
 

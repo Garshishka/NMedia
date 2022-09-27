@@ -16,8 +16,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     val viewModel: PostViewModel by viewModels()
     val interactionListener = object : OnInteractionListener {
+
         override fun onEdit(post: Post) {
-            descriptorVisibility(true)
             viewModel.edit(post)
         }
 
@@ -61,10 +61,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
-        binding.content.setOnClickListener() {
-            with(binding.content) {
-                descriptorVisibility(true)
-            }
+        binding.content.setOnFocusChangeListener { view, b ->
+            if(b) descriptorVisibility(true)
         }
         binding.save.setOnClickListener {
             with(binding.content) {
@@ -77,7 +75,6 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     viewModel.changeContent(text.toString())
                     viewModel.save()
-
                     setText("")
                     clearFocus()
                     descriptorVisibility(false)
@@ -85,23 +82,18 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        binding.closeEdit.setOnClickListener({
+        binding.closeEdit.setOnClickListener {
             with(binding.content) {
                 setText("")
                 clearFocus()
                 descriptorVisibility(false)
                 AndroidUtils.hideKeyboard(this)
             }
-        })
+            viewModel.empty()
+        }
     }
 
     private fun descriptorVisibility(willShow: Boolean) {
-        if (willShow) {
-            binding.contentDescriptor.visibility = View.VISIBLE
-            binding.closeEdit.visibility = View.VISIBLE
-        } else {
-            binding.contentDescriptor.visibility = View.GONE
-            binding.closeEdit.visibility = View.GONE
-        }
+        binding.contentDescriptorGroup.visibility = if (willShow) View.VISIBLE else View.GONE
     }
 }
