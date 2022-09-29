@@ -12,17 +12,14 @@ class PostViewHolder(
     private val onInteractionListener: OnInteractionListener
 ) : RecyclerView.ViewHolder(binding.root)
 {
-    private val likeNotPressed = R.drawable.ic_baseline_favorite_border_24
-    private val likePressed = R.drawable.ic_baseline_favorite_24
-
     fun bind(post: Post) {
         binding.apply {
             author.text = post.author
             published.text = post.published
             content.text = post.content
             likesText.text = formattingBigNumbers(post.likesAmount)
-            likesIcon.setImageResource(if (post.likedByMe) likePressed else likeNotPressed)
-            likesIcon.setOnClickListener { onInteractionListener.onLike(post)}
+            like.isChecked = post.likedByMe
+            like.setOnClickListener { onInteractionListener.onLike(post)}
             shareText.text = formattingBigNumbers(post.sharesAmount)
             shareIcon.setOnClickListener { onInteractionListener.onShare(post) }
             viewsText.text = formattingBigNumbers(post.views)

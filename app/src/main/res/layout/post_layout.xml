@@ -73,14 +73,13 @@
         app:barrierDirection="bottom"
         app:constraint_referenced_ids="content" />
 
-    <ImageButton
-        android:id="@+id/likesIcon"
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/like"
         android:layout_width="@dimen/pictureSize"
         android:layout_height="@dimen/pictureSize"
         android:layout_marginStart="@dimen/marginDefault"
-        android:background="@android:color/transparent"
         android:contentDescription="@string/description_post_likes"
-        android:src="@drawable/ic_baseline_favorite_border_24"
+        android:button="@drawable/ic_like_24dp"
         app:layout_constraintEnd_toStartOf="@id/likesText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/barrierBottom" />
@@ -89,10 +88,10 @@
         android:id="@+id/likesText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@id/likesIcon"
+        app:layout_constraintBottom_toBottomOf="@id/like"
         app:layout_constraintEnd_toStartOf="@id/shareIcon"
-        app:layout_constraintStart_toEndOf="@id/likesIcon"
-        app:layout_constraintTop_toTopOf="@id/likesIcon"
+        app:layout_constraintStart_toEndOf="@id/like"
+        app:layout_constraintTop_toTopOf="@id/like"
         tools:text="@sample/posts.json/data/likes" />
 
     <ImageButton

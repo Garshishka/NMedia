@@ -3,7 +3,7 @@
     <string name="nmedia">NMedia!</string>
     <string name="description_post_author_avatar">Post author avatar</string>
     <string name="description_post_menu">Post menu</string>
-    <string name="description_post_likes">Amount of likes</string>
+    <string name="description_post_likes">Like</string>
     <string name="description_post_shares">Amount of shares</string>
     <string name="description_post_views">Amount of views</string>
     <string name="remove">Remove</string>
