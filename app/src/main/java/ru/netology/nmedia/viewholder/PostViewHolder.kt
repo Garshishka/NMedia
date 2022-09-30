@@ -17,11 +17,11 @@ class PostViewHolder(
             author.text = post.author
             published.text = post.published
             content.text = post.content
-            likesText.text = formattingBigNumbers(post.likesAmount)
+            like.text = formattingBigNumbers(post.likesAmount)
             like.isChecked = post.likedByMe
             like.setOnClickListener { onInteractionListener.onLike(post)}
-            shareText.text = formattingBigNumbers(post.sharesAmount)
-            shareIcon.setOnClickListener { onInteractionListener.onShare(post) }
+            share.text = formattingBigNumbers(post.sharesAmount)
+            share.setOnClickListener { onInteractionListener.onShare(post) }
             viewsText.text = formattingBigNumbers(post.views)
 
             menu.setOnClickListener {
@@ -42,7 +42,6 @@ class PostViewHolder(
                     }
                 }.show()
             }
-
         }
     }
 
