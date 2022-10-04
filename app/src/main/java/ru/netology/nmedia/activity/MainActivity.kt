@@ -1,11 +1,13 @@
-package ru.netology.nmedia
+package ru.netology.nmedia.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.launch
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
+import ru.netology.nmedia.*
 import ru.netology.nmedia.databinding.ActivityMainBinding
 import ru.netology.nmedia.viewholder.OnInteractionListener
 import ru.netology.nmedia.viewholder.PostsAdapter
@@ -26,6 +28,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onShare(post: Post) {
+            val intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, post.content)
+                type = "text/plain"
+            }
+            val shareIntent = Intent.createChooser(intent, getString(R.string.chooser_share_post))
+            startActivity(shareIntent)
+
             viewModel.shareById(post.id)
         }
 
@@ -43,24 +53,37 @@ class MainActivity : AppCompatActivity() {
 
         binding.list.adapter = adapter
         subscribe()
-        setupListeners()
+        //setupListeners()
     }
 
     private fun subscribe() {
         viewModel.data.observe(this) { posts ->
             adapter.submitList(posts)
         }
+
+        val newPostLauncher = registerForActivityResult(NewPostResultContract()) { result ->
+            result ?: return@registerForActivityResult
+            viewModel.changeContent(result)
+            viewModel.save()
+        }
+
+        binding.fab.setOnClickListener{
+            newPostLauncher.launch()
+        }
+
         viewModel.edited.observe(this) { post ->
-            if (post.id != 0L) {
+            /*if (post.id != 0L) {
                 with(binding.content) {
                     requestFocus()
                     setText(post.content)
                 }
-            }
+            }*/
         }
     }
 
-    private fun setupListeners() {
+    /*private fun setupListeners() {
+
+
         binding.content.setOnFocusChangeListener { view, b ->
             if(b) descriptorVisibility(true)
         }
@@ -91,9 +114,10 @@ class MainActivity : AppCompatActivity() {
             }
             viewModel.empty()
         }
-    }
 
-    private fun descriptorVisibility(willShow: Boolean) {
+    }*/
+
+    /*private fun descriptorVisibility(willShow: Boolean) {
         binding.contentDescriptorGroup.visibility = if (willShow) View.VISIBLE else View.GONE
-    }
+    }*/
 }
