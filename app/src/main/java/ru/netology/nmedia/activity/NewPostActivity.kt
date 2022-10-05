@@ -2,16 +2,20 @@ package ru.netology.nmedia.activity
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import ru.netology.nmedia.R
+import androidx.appcompat.app.AppCompatActivity
 import ru.netology.nmedia.databinding.ActivityNewPostBinding
 
 class NewPostActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val intent = intent
+        val input  = intent.getStringExtra("editText")
+
         val binding = ActivityNewPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.edit.setText(input)
         binding.edit.requestFocus()
         binding.ok.setOnClickListener{
             val  intent = Intent()

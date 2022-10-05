@@ -6,9 +6,12 @@ import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContract
 import ru.netology.nmedia.activity.NewPostActivity
 
-class NewPostResultContract:ActivityResultContract<Unit,String?>() {
-    override fun createIntent(context: Context, input: Unit): Intent =
-        Intent(context, NewPostActivity::class.java)
+class NewOrEditPostResultContract:ActivityResultContract<String,String?>() {
+    override fun createIntent(context: Context, input: String): Intent {
+        val intent =  Intent(context, NewPostActivity::class.java)
+        intent.putExtra("editText",input)
+        return intent
+    }
 
     override fun parseResult(resultCode: Int, intent: Intent?): String? =
         if (resultCode == Activity.RESULT_OK) {

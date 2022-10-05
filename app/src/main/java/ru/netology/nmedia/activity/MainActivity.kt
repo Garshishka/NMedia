@@ -17,9 +17,17 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
     val viewModel: PostViewModel by viewModels()
+
+    val newPostLauncher = registerForActivityResult(NewOrEditPostResultContract()) { result ->
+        result ?: return@registerForActivityResult
+        viewModel.changeContent(result)
+        viewModel.save()
+    }
+
     val interactionListener = object : OnInteractionListener {
 
         override fun onEdit(post: Post) {
+            newPostLauncher.launch(post.content)
             viewModel.edit(post)
         }
 
@@ -44,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     val adapter = PostsAdapter(interactionListener)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,24 +70,18 @@ class MainActivity : AppCompatActivity() {
             adapter.submitList(posts)
         }
 
-        val newPostLauncher = registerForActivityResult(NewPostResultContract()) { result ->
-            result ?: return@registerForActivityResult
-            viewModel.changeContent(result)
-            viewModel.save()
-        }
-
         binding.fab.setOnClickListener{
-            newPostLauncher.launch()
+            newPostLauncher.launch("")
         }
 
-        viewModel.edited.observe(this) { post ->
-            /*if (post.id != 0L) {
+        /*viewModel.edited.observe(this) { post ->
+            if (post.id != 0L) {
                 with(binding.content) {
                     requestFocus()
                     setText(post.content)
                 }
-            }*/
-        }
+            }
+        }*/
     }
 
     /*private fun setupListeners() {
