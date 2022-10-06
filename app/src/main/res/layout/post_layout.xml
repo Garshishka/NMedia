@@ -66,12 +66,38 @@
         app:layout_constraintTop_toTopOf="@id/barrierTop"
         tools:text="@sample/posts.json/data/content" />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/videoGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="videoPicture,playButton"
+        android:visibility="gone"
+        />
+    <ImageButton
+        android:id="@+id/videoPicture"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/video_height"
+        android:src="@drawable/ic_baseline_video"
+        app:layout_constraintTop_toBottomOf="@id/content"
+        android:contentDescription="@string/attached_video"
+        />
+    <ImageView
+        android:id="@+id/playButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_play_circle_80"
+        app:layout_constraintTop_toTopOf="@id/videoPicture"
+        app:layout_constraintStart_toStartOf="@id/videoPicture"
+        app:layout_constraintEnd_toEndOf="@id/videoPicture"
+        app:layout_constraintBottom_toBottomOf="@id/videoPicture"
+        android:contentDescription="@string/play_video" />
+
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrierBottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="content" />
+        app:constraint_referenced_ids="content,videoPicture" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/like"

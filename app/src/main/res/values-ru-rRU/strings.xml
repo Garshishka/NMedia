@@ -13,4 +13,9 @@
     <string name="edit">Редактировать</string>
     <string name="close_edit">Закрыть редактирование</string>
     <string name="editing_post">Редактируемое сообщение</string>
+    <string name="chooser_share_post">Поделиться</string>
+    <string name="error_empty_content">Пустое сообщение</string>
+    <string name="add_post">Новый пост</string>
+    <string name="attached_video">Добавленное видео</string>
+    <string name="play_video">Показать видео</string>
 </resources>

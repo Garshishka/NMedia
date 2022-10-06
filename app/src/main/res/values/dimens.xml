@@ -5,4 +5,5 @@
     <dimen name="marginDefault">16dp</dimen>
     <dimen name="descriptor_size">32dp</dimen>
     <dimen name="descriptor_text_size">16dp</dimen>
+    <dimen name="video_height">200dp</dimen>
 </resources>

@@ -1,5 +1,6 @@
 package ru.netology.nmedia.viewholder
 
+import android.view.View
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nmedia.Post
@@ -23,6 +24,12 @@ class PostViewHolder(
             share.text = formattingBigNumbers(post.sharesAmount)
             share.setOnClickListener { onInteractionListener.onShare(post) }
             viewsText.text = formattingBigNumbers(post.views)
+
+            if (post.attachedVideo!="") {
+                videoGroup.visibility = View.VISIBLE
+                videoPicture.setOnClickListener{onInteractionListener.onVideoClick(post)}
+            }
+
 
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {

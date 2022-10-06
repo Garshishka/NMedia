@@ -25,7 +25,8 @@ class PostRepositoryInMemoryImpl : PostRepository {
             likesAmount = 10_000,
             sharesAmount = 999_997,
             likedByMe = true,
-            views = 1_232_342
+            views = 1_232_342,
+            attachedVideo = "https://www.youtube.com/watch?v=3m7ZUL8zJSc"
         ),
         Post(
             id = nextId++,
@@ -45,7 +46,8 @@ class PostRepositoryInMemoryImpl : PostRepository {
             likesAmount = 12,
             sharesAmount = 1_198,
             likedByMe = false,
-            views = 1123
+            views = 1123,
+            attachedVideo = "https://www.youtube.com/watch?v=JDXfqN3VKhc"
         )
     )
     private val data = MutableLiveData(posts)
