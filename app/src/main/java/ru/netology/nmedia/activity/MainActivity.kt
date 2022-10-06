@@ -1,6 +1,7 @@
 package ru.netology.nmedia.activity
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -24,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.save()
     }
 
-    val interactionListener = object : OnInteractionListener {
+    private val interactionListener = object : OnInteractionListener {
 
         override fun onEdit(post: Post) {
             newPostLauncher.launch(post.content)
@@ -49,6 +50,11 @@ class MainActivity : AppCompatActivity() {
 
         override fun onRemove(post: Post) {
             viewModel.removeById(post.id)
+        }
+
+        override fun onVideoClick(post: Post) {
+            val intent =  Intent(Intent.ACTION_VIEW, Uri.parse(post.attachedVideo))
+            startActivity(intent)
         }
     }
 
