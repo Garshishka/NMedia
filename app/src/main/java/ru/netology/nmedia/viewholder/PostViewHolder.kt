@@ -11,36 +11,36 @@ import ru.netology.nmedia.databinding.PostLayoutBinding
 class PostViewHolder(
     private val binding: PostLayoutBinding,
     private val onInteractionListener: OnInteractionListener
-) : RecyclerView.ViewHolder(binding.root)
-{
+) : RecyclerView.ViewHolder(binding.root) {
     fun bind(post: Post) {
         binding.apply {
+            wholePost.setOnClickListener { onInteractionListener.onPostClick(post) }
             author.text = post.author
             published.text = post.published
             content.text = post.content
             like.text = formattingBigNumbers(post.likesAmount)
             like.isChecked = post.likedByMe
-            like.setOnClickListener { onInteractionListener.onLike(post)}
+            like.setOnClickListener { onInteractionListener.onLike(post) }
             share.text = formattingBigNumbers(post.sharesAmount)
             share.setOnClickListener { onInteractionListener.onShare(post) }
             viewsText.text = formattingBigNumbers(post.views)
 
-            if (post.attachedVideo!="") {
+            if (post.attachedVideo != "") {
                 videoGroup.visibility = View.VISIBLE
-                videoPicture.setOnClickListener{onInteractionListener.onVideoClick(post)}
+                videoPicture.setOnClickListener { onInteractionListener.onVideoClick(post) }
             }
 
 
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
                     inflate(R.menu.options_post)
-                    setOnMenuItemClickListener {  item->
-                        when (item.itemId){
-                            R.id.remove ->{
+                    setOnMenuItemClickListener { item ->
+                        when (item.itemId) {
+                            R.id.remove -> {
                                 onInteractionListener.onRemove(post)
                                 true
                             }
-                            R.id.edit ->{
+                            R.id.edit -> {
                                 onInteractionListener.onEdit(post)
                                 true
                             }
