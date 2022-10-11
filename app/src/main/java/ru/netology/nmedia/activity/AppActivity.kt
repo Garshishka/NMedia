@@ -30,7 +30,6 @@ class AppActivity : AppCompatActivity() {
                     .show()
                 return@let
             }
-            //findNavController(R.id.container).navigate(R.id.action_feedFragment_to_newPostFragment,
             val navHostFragment =
                 supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
             navHostFragment.navController.navigate(

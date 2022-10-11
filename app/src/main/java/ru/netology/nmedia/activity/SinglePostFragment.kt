@@ -13,21 +13,19 @@ import ru.netology.nmedia.Post
 import ru.netology.nmedia.PostViewModel
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
-import ru.netology.nmedia.activity.SinglePostFragment.Companion.idArg
-import ru.netology.nmedia.databinding.FragmentFeedBinding
+import ru.netology.nmedia.databinding.FragmentSinglePostBinding
+import ru.netology.nmedia.utils.LongArg
 import ru.netology.nmedia.viewholder.OnInteractionListener
-import ru.netology.nmedia.viewholder.PostsAdapter
+import ru.netology.nmedia.viewholder.PostViewHolder
 
-
-class FeedFragment : Fragment() {
-
-    lateinit var binding: FragmentFeedBinding
+class SinglePostFragment : Fragment() {
     val viewModel by viewModels<PostViewModel>(ownerProducer = ::requireParentFragment)
 
     private val interactionListener = object : OnInteractionListener {
 
         override fun onEdit(post: Post) {
-            findNavController().navigate(R.id.action_feedFragment_to_newPostFragment,
+            findNavController().navigate(
+                R.id.action_singlePostFragment_to_newPostFragment,
                 Bundle().apply
                 { textArg = post.content })
             viewModel.edit(post)
@@ -51,6 +49,7 @@ class FeedFragment : Fragment() {
 
         override fun onRemove(post: Post) {
             viewModel.removeById(post.id)
+            findNavController().navigateUp()
         }
 
         override fun onVideoClick(post: Post) {
@@ -59,35 +58,33 @@ class FeedFragment : Fragment() {
         }
 
         override fun onPostClick(post: Post) {
-            findNavController().navigate(R.id.action_feedFragment_to_singlePostFragment,
-                Bundle().apply
-                { idArg = post.id })
+            findNavController().navigateUp()
         }
     }
-
-    val adapter = PostsAdapter(interactionListener)
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentFeedBinding.inflate(inflater, container, false)
+        var binding = FragmentSinglePostBinding.inflate(inflater, container, false)
 
-        binding.list.adapter = adapter
-        subscribe()
+        var viewHolder = PostViewHolder(binding.singlePost, interactionListener)
+
+        val findId = arguments?.idArg
+
+        viewModel.data.observe(viewLifecycleOwner) { posts ->
+            val post = posts.find { it.id == findId } ?: run {
+                findNavController().navigateUp()
+                return@observe
+            }
+            viewHolder.bind(post)
+        }
 
         return binding.root
     }
 
-
-    private fun subscribe() {
-        viewModel.data.observe(viewLifecycleOwner) { posts ->
-            adapter.submitList(posts)
-        }
-
-        binding.fab.setOnClickListener {
-            findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
-        }
+    companion object {
+        var Bundle.idArg by LongArg
     }
 }

@@ -17,7 +17,6 @@ class NewPostFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        super.onCreateView(inflater, container, savedInstanceState)
         val viewModel by viewModels<PostViewModel>(ownerProducer = ::requireParentFragment)
 
         val binding = FragmentNewPostBinding.inflate(inflater, container, false)
