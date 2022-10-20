@@ -20,6 +20,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     )
     val data = repository.getAll()
     val edited = MutableLiveData(empty)
+    var draft = ""
 
     fun empty() {
         edited.value = empty
