@@ -18,4 +18,5 @@
     <string name="add_post">Новый пост</string>
     <string name="attached_video">Добавленное видео</string>
     <string name="play_video">Показать видео</string>
+    <string name="google_play_unavailable">Google play is unavailable</string>
 </resources>

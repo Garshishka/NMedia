@@ -17,4 +17,5 @@
     <string name="add_post">Add post</string>
     <string name="attached_video">Attached Video</string>
     <string name="play_video">Play video</string>
+    <string name="google_play_unavailable">Google play is unavailable</string>
 </resources>
