@@ -21,4 +21,5 @@
     <string name="channel_remote_name">Channel name</string>
     <string name="channel_remote_description">Channel description</string>
     <string name="notification_user_liked">%1$s liked post %2$s</string>
+    <string name="notification_new_post">%1$s made new post:</string>
 </resources>

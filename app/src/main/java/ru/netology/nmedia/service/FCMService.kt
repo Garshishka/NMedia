@@ -43,6 +43,12 @@ class FCMService : FirebaseMessagingService() {
                             Like::class.java
                         )
                     )
+                    Action.NEWPOST -> handleNewPost(
+                        gson.fromJson(
+                            message.data[content],
+                            NewPost::class.java
+                        )
+                    )
                 }
             } catch (e: IllegalArgumentException) {
                 handleException()
@@ -64,6 +70,16 @@ class FCMService : FirebaseMessagingService() {
         )
     }
 
+    private fun handleNewPost(content: NewPost){
+        makeNotificationWithBigText(
+            getString(
+                R.string.notification_new_post,
+                content.userName,
+               // content.postText.take(15)+"..."
+            ), content.postText
+        )
+    }
+
     private fun handleException() {
         makeNotification("Some unknown type of notification received")
     }
@@ -78,10 +94,25 @@ class FCMService : FirebaseMessagingService() {
         NotificationManagerCompat.from(this)
             .notify(Random.nextInt(100_000), notification)
     }
+
+    private fun makeNotificationWithBigText(title: String, postText: String) {
+        val notification = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.ic_notification)
+            .setContentTitle(title)
+            .setContentText(postText.take(20)+"...")
+            .setStyle(NotificationCompat.BigTextStyle()
+                .bigText(postText))
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .build()
+
+        NotificationManagerCompat.from(this)
+            .notify(Random.nextInt(100_000), notification)
+    }
 }
 
 enum class Action {
     LIKE,
+    NEWPOST,
 }
 
 data class Like(
@@ -89,4 +120,10 @@ data class Like(
     val userName: String,
     val postId: Long,
     val postAuthor: String,
+)
+
+data class NewPost(
+    val userId: Long,
+    val userName: String,
+    val postText: String
 )
