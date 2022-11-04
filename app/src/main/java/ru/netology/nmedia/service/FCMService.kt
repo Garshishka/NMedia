@@ -13,7 +13,9 @@ import ru.netology.nmedia.R
 import kotlin.random.Random
 
 
+
 class FCMService : FirebaseMessagingService() {
+
     private val action = "action"
     private val content = "content"
     private val channelId = "remote"
@@ -26,6 +28,7 @@ class FCMService : FirebaseMessagingService() {
             val descriptionText = getString(R.string.channel_remote_description)
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(channelId, name, importance).apply {
+
                 description = descriptionText
             }
             val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
