@@ -19,4 +19,7 @@
     <string name="attached_video">Добавленное видео</string>
     <string name="play_video">Показать видео</string>
     <string name="google_play_unavailable">Google play is unavailable</string>
+    <string name="channel_remote_name">Название канала</string>
+    <string name="channel_remote_description">Описание канала</string>
+    <string name="notification_user_liked">%1$s понравился пост %2$s</string>
 </resources>

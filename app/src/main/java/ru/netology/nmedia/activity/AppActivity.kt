@@ -9,6 +9,7 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.messaging.FirebaseMessaging
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.databinding.ActivityAppBinding
@@ -58,8 +59,9 @@ class AppActivity : AppCompatActivity() {
                 .show()
         }
 
-        /*FirebaseMessaging.getInstance().token.addOnSuccessListener {
+        FirebaseMessaging.getInstance().token.addOnSuccessListener {
             println(it)
-        }*/
+           // Toast.makeText(this@AppActivity,it,Toast.LENGTH_LONG).show()
+        }
     }
 }
