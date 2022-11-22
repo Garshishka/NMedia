@@ -25,7 +25,7 @@ class PostViewHolder(
             share.setOnClickListener { onInteractionListener.onShare(post) }
             viewsText.text = formattingBigNumbers(post.views)
 
-            if (post.attachedVideo != "") {
+            if (!post.attachedVideo.isNullOrEmpty()) {
                 videoGroup.visibility = View.VISIBLE
                 videoPicture.setOnClickListener { onInteractionListener.onVideoClick(post) }
             }

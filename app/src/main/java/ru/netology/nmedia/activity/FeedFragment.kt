@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -82,8 +83,15 @@ class FeedFragment : Fragment() {
 
 
     private fun subscribe() {
-        viewModel.data.observe(viewLifecycleOwner) { posts ->
-            adapter.submitList(posts)
+        viewModel.data. observe(viewLifecycleOwner) { state  ->
+            adapter.submitList(state.posts)
+            binding.errorGroup.isVisible = state.error
+            binding.loading.isVisible = state.loading
+            binding.empty.isVisible = state.empty
+        }
+
+        binding.retry.setOnClickListener{
+            viewModel.load()
         }
 
         binding.fab.setOnClickListener {

@@ -67,19 +67,9 @@ class SinglePostFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        var binding = FragmentSinglePostBinding.inflate(inflater, container, false)
+        val binding = FragmentSinglePostBinding.inflate(inflater, container, false)
 
         var viewHolder = PostViewHolder(binding.singlePost, interactionListener)
-
-        val findId = arguments?.idArg
-
-        viewModel.data.observe(viewLifecycleOwner) { posts ->
-            val post = posts.find { it.id == findId } ?: run {
-                findNavController().navigateUp()
-                return@observe
-            }
-            viewHolder.bind(post)
-        }
 
         return binding.root
     }

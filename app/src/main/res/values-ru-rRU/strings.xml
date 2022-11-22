@@ -14,7 +14,7 @@
     <string name="close_edit">Закрыть редактирование</string>
     <string name="editing_post">Редактируемое сообщение</string>
     <string name="chooser_share_post">Поделиться</string>
-    <string name="error_empty_content">Пустое сообщение</string>
+    <string name="error_empty_content">Сообщение не может быть пустым</string>
     <string name="add_post">Новый пост</string>
     <string name="attached_video">Добавленное видео</string>
     <string name="play_video">Показать видео</string>
@@ -23,4 +23,7 @@
     <string name="channel_remote_description">Описание канала</string>
     <string name="notification_user_liked">%1$s понравился пост %2$s</string>
     <string name="notification_new_post">%1$s сделал новый пост:</string>
+    <string name="error">Произошла некая ошибка</string>
+    <string name="retry">Повторить</string>
+    <string name="posts_empty">Посты отсутствуют</string>
 </resources>

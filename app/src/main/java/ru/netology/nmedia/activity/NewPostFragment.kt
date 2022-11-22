@@ -8,11 +8,9 @@ import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.PostViewModel
-import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentNewPostBinding
+import ru.netology.nmedia.utils.AndroidUtils
 import ru.netology.nmedia.utils.StringArg
 
 class NewPostFragment : Fragment() {
@@ -39,6 +37,11 @@ class NewPostFragment : Fragment() {
                 viewModel.changeContent(text)
                 viewModel.save()
             }
+            AndroidUtils.hideKeyboard(requireView())
+        }
+
+        viewModel.postCreated.observe(viewLifecycleOwner){
+            viewModel.load()
             findNavController().navigateUp()
         }
 
