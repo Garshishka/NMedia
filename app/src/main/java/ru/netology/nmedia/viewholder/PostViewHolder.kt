@@ -18,7 +18,7 @@ class PostViewHolder(
             author.text = post.author
             published.text = post.published
             content.text = post.content
-            like.text = formattingBigNumbers(post.likesAmount)
+            like.text = formattingBigNumbers(post.likes)
             like.isChecked = post.likedByMe
             like.setOnClickListener { onInteractionListener.onLike(post) }
             share.text = formattingBigNumbers(post.sharesAmount)

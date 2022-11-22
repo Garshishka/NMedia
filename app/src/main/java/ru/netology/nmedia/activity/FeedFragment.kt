@@ -35,7 +35,7 @@ class FeedFragment : Fragment() {
         }
 
         override fun onLike(post: Post) {
-            viewModel.likeById(post.id)
+            viewModel.likeById(post.id, post.likedByMe)
         }
 
         override fun onShare(post: Post) {
@@ -83,14 +83,18 @@ class FeedFragment : Fragment() {
 
 
     private fun subscribe() {
-        viewModel.data. observe(viewLifecycleOwner) { state  ->
+        viewModel.data.observe(viewLifecycleOwner) { state ->
             adapter.submitList(state.posts)
             binding.errorGroup.isVisible = state.error
             binding.loading.isVisible = state.loading
             binding.empty.isVisible = state.empty
         }
 
-        binding.retry.setOnClickListener{
+        viewModel.postUpdated.observe(viewLifecycleOwner) {
+            viewModel.load()
+        }
+
+        binding.retry.setOnClickListener {
             viewModel.load()
         }
 

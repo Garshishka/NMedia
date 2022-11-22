@@ -24,7 +24,7 @@ class PostRepositoryImpl(
     }
 
     override fun getAll(): List<Post> {
-        val request : Request = Request.Builder()
+        val request: Request = Request.Builder()
             .url("${BASE_URL}/api/slow/posts")
             .build()
 
@@ -33,11 +33,11 @@ class PostRepositoryImpl(
             .let { it.body?.string() ?: throw RuntimeException("body is null") }
             .let {
                 gson.fromJson(it, typeToken.type)
-            }?: emptyList()
+            } ?: emptyList()
     }
 
     override fun save(post: Post): Post {
-        val request : Request = Request.Builder()
+        val request: Request = Request.Builder()
             .url("${BASE_URL}/api/slow/posts")
             .post(gson.toJson(post).toRequestBody(jsonType))
             .build()
@@ -47,11 +47,28 @@ class PostRepositoryImpl(
                 it.body?.string()
             }?.let {
                 gson.fromJson(it, Post::class.java)
-            } ?: error("Empry response body")
+            } ?: error("Empty response body")
     }
 
     override fun likeById(id: Long) {
-        //TODO
+        val request: Request = Request.Builder()
+            .post(gson.toJson(id).toRequestBody(jsonType))
+            .url("${BASE_URL}/api/slow/posts/$id/likes")
+            .build()
+
+        client.newCall(request)
+            .execute().close()
+
+    }
+
+    override fun unLikeById(id: Long) {
+        val request: Request = Request.Builder()
+            .delete(gson.toJson(id).toRequestBody(jsonType))
+            .url("${BASE_URL}/api/slow/posts/$id/likes")
+            .build()
+
+        client.newCall(request)
+            .execute().close()
     }
 
     override fun shareById(id: Long) {
@@ -59,7 +76,7 @@ class PostRepositoryImpl(
     }
 
     override fun removeById(id: Long) {
-        val request : Request = Request.Builder()
+        val request: Request = Request.Builder()
             .url("${BASE_URL}/api/slow/posts/$id")
             .delete()
             .build()
