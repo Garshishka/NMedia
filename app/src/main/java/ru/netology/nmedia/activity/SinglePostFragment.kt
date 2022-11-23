@@ -32,7 +32,7 @@ class SinglePostFragment : Fragment() {
         }
 
         override fun onLike(post: Post) {
-            viewModel.likeById(post.id)
+            viewModel.likeById(post.id, post.likedByMe)
         }
 
         override fun onShare(post: Post) {
@@ -67,18 +67,13 @@ class SinglePostFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        var binding = FragmentSinglePostBinding.inflate(inflater, container, false)
+        val binding = FragmentSinglePostBinding.inflate(inflater, container, false)
 
         var viewHolder = PostViewHolder(binding.singlePost, interactionListener)
 
-        val findId = arguments?.idArg
-
-        viewModel.data.observe(viewLifecycleOwner) { posts ->
-            val post = posts.find { it.id == findId } ?: run {
-                findNavController().navigateUp()
-                return@observe
-            }
-            viewHolder.bind(post)
+        viewModel.postUpdated.observe(viewLifecycleOwner) {
+            findNavController().navigateUp()
+            viewModel.load()
         }
 
         return binding.root

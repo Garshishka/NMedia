@@ -13,7 +13,7 @@
     <string name="close_edit">Close edit</string>
     <string name="editing_post">Editing post</string>
     <string name="chooser_share_post">Share</string>
-    <string name="error_empty_content">Its empty</string>
+    <string name="error_empty_content">Content can\'t be empty</string>
     <string name="add_post">Add post</string>
     <string name="attached_video">Attached Video</string>
     <string name="play_video">Play video</string>
@@ -22,4 +22,7 @@
     <string name="channel_remote_description">Channel description</string>
     <string name="notification_user_liked">%1$s liked post %2$s</string>
     <string name="notification_new_post">%1$s made new post:</string>
+    <string name="error">Some error happened</string>
+    <string name="retry">Retry</string>
+    <string name="posts_empty">No posts exists</string>
 </resources>
