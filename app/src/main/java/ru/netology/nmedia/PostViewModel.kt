@@ -26,9 +26,6 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     private val _postCreated = SingleLiveEvent<Unit>()
     val postCreated: LiveData<Unit>
         get() = _postCreated
-    private val _postUpdated = SingleLiveEvent<Unit>()
-    val postUpdated: LiveData<Unit>
-        get() = _postUpdated
 
     var draft = ""
 
@@ -83,8 +80,16 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun likeById(id: Long, likedByMe: Boolean) {
         thread {
-            if (likedByMe) repository.unLikeById(id) else repository.likeById(id)
-            _postUpdated.postValue(Unit)
+            val old = _data.value
+            try {
+                val returnedPost =
+                    if (likedByMe) repository.unLikeById(id) else repository.likeById(id)
+                val newPosts =
+                    (_data.value?.posts.orEmpty().map { if (it.id == id) returnedPost else it })
+                _data.postValue(_data.value?.copy(posts = newPosts, empty = newPosts.isEmpty()))
+            } catch (e: Exception) {
+                _data.postValue(old)
+            }
         }
     }
 
