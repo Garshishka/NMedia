@@ -50,25 +50,32 @@ class PostRepositoryImpl(
             } ?: error("Empty response body")
     }
 
-    override fun likeById(id: Long) {
+    override fun likeById(id: Long): Post {
         val request: Request = Request.Builder()
             .post(gson.toJson(id).toRequestBody(jsonType))
             .url("${BASE_URL}/api/slow/posts/$id/likes")
             .build()
 
-        client.newCall(request)
-            .execute().close()
-
+        return client.newCall(request)
+            .execute().let {
+                it.body?.string()
+            }?.let {
+                gson.fromJson(it, Post::class.java)
+            } ?: error("Empty response body")
     }
 
-    override fun unLikeById(id: Long) {
+    override fun unLikeById(id: Long): Post {
         val request: Request = Request.Builder()
             .delete(gson.toJson(id).toRequestBody(jsonType))
             .url("${BASE_URL}/api/slow/posts/$id/likes")
             .build()
 
-        client.newCall(request)
-            .execute().close()
+        return client.newCall(request)
+            .execute().let {
+                it.body?.string()
+            }?.let {
+                gson.fromJson(it, Post::class.java)
+            } ?: error("Empty response body")
     }
 
     override fun shareById(id: Long) {

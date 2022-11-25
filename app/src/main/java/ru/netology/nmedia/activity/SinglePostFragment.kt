@@ -71,11 +71,6 @@ class SinglePostFragment : Fragment() {
 
         var viewHolder = PostViewHolder(binding.singlePost, interactionListener)
 
-        viewModel.postUpdated.observe(viewLifecycleOwner) {
-            findNavController().navigateUp()
-            viewModel.load()
-        }
-
         return binding.root
     }
 
