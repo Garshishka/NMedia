@@ -69,7 +69,17 @@ class SinglePostFragment : Fragment() {
     ): View {
         val binding = FragmentSinglePostBinding.inflate(inflater, container, false)
 
-        var viewHolder = PostViewHolder(binding.singlePost, interactionListener)
+        val viewHolder = PostViewHolder(binding.singlePost, interactionListener)
+
+        val findId = arguments?.idArg
+
+        viewModel.data.observe(viewLifecycleOwner) { feedModel ->
+            val post = feedModel.posts.find { it.id == findId } ?: run {
+                findNavController().navigateUp()
+                return@observe
+            }
+            viewHolder.bind(post)
+        }
 
         return binding.root
     }
