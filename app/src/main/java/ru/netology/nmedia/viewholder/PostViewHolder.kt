@@ -1,11 +1,14 @@
 package ru.netology.nmedia.viewholder
 
 import android.view.View
+import android.widget.ImageView
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import ru.netology.nmedia.Post
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.PostLayoutBinding
+import ru.netology.nmedia.repository.PostRepositoryImpl
 
 
 class PostViewHolder(
@@ -30,7 +33,6 @@ class PostViewHolder(
                 videoPicture.setOnClickListener { onInteractionListener.onVideoClick(post) }
             }
 
-
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
                     inflate(R.menu.options_post)
@@ -49,7 +51,19 @@ class PostViewHolder(
                     }
                 }.show()
             }
+
+            val url = "${PostRepositoryImpl.BASE_URL}/avatars/${post.authorAvatar}"
+            binding.avatar.load(url)
         }
+    }
+
+    private fun ImageView.load(url: String, timeout : Int = 10_000){
+        Glide.with(this)
+            .load(url)
+            .error(R.drawable.ic_baseline_error_outline_48)
+            .placeholder(R.drawable.ic_baseline_downloading_48)
+            .timeout(timeout)
+            .into(this)
     }
 
     private fun formattingBigNumbers(number: Long): String {
