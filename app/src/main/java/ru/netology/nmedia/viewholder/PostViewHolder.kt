@@ -60,6 +60,7 @@ class PostViewHolder(
     private fun ImageView.load(url: String, timeout : Int = 10_000){
         Glide.with(this)
             .load(url)
+            .circleCrop()
             .error(R.drawable.ic_baseline_error_outline_48)
             .placeholder(R.drawable.ic_baseline_downloading_48)
             .timeout(timeout)
