@@ -16,7 +16,7 @@
     <string name="chooser_share_post">Поделиться</string>
     <string name="error_empty_content">Сообщение не может быть пустым</string>
     <string name="add_post">Новый пост</string>
-    <string name="attached_video">Добавленное видео</string>
+    <string name="attached_content">Прикрепленное</string>
     <string name="play_video">Показать видео</string>
     <string name="google_play_unavailable">Google play is unavailable</string>
     <string name="channel_remote_name">Название канала</string>

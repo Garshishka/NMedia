@@ -10,5 +10,15 @@ data class Post(
     val sharesAmount: Long = 0,
     val likedByMe: Boolean = false,
     val views: Long = 0,
-    val attachedVideo: String = ""
+    val attachment: Attachment? = null
 )
+
+data class Attachment(
+    val url: String,
+    val description: String,
+    val type: AttachmentType = AttachmentType.IMAGE
+)
+
+enum class AttachmentType {
+    IMAGE
+}

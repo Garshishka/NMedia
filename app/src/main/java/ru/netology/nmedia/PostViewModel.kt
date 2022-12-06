@@ -39,11 +39,10 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             override fun onSuccess(posts: List<Post>) {
                 _data.postValue(
                     FeedModel(
-                        posts = posts.map { it.copy(attachedVideo = "") },
+                        posts = posts,
                         empty = posts.isEmpty()
                     )
                 )
-                //because sever makes posts with attachedVideo as NULL, we make it "" at loading into viewmodel
             }
 
             override fun onError(e: Exception) {
