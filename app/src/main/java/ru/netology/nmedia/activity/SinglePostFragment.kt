@@ -1,7 +1,6 @@
 package ru.netology.nmedia.activity
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -53,8 +52,9 @@ class SinglePostFragment : Fragment() {
         }
 
         override fun onVideoClick(post: Post) {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.attachedVideo))
-            startActivity(intent)
+            // val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.attachment.url))
+            //startActivity(intent)
+            // TODO: Make video click working again
         }
 
         override fun onPostClick(post: Post) {

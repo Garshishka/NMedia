@@ -5,6 +5,7 @@ import android.widget.ImageView
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import ru.netology.nmedia.AttachmentType
 import ru.netology.nmedia.Post
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.PostLayoutBinding
@@ -28,10 +29,16 @@ class PostViewHolder(
             share.setOnClickListener { onInteractionListener.onShare(post) }
             viewsText.text = formattingBigNumbers(post.views)
 
-            if (!post.attachedVideo.isNullOrEmpty()) {
-                videoGroup.visibility = View.VISIBLE
-                videoPicture.setOnClickListener { onInteractionListener.onVideoClick(post) }
-            }
+            if (post.attachment != null) {
+                attachmentPicture.visibility = View.VISIBLE
+                val attachmentUrl = "${PostRepositoryImpl.BASE_URL}/images/${post.attachment.url}"
+                binding.attachmentPicture.load(attachmentUrl)
+                if (post.attachment.type == AttachmentType.IMAGE) {
+                    playButton.visibility = View.GONE
+                } else {
+                    attachmentPicture.setOnClickListener { onInteractionListener.onVideoClick(post) }
+                }
+            } else attachmentPicture.visibility = View.GONE
 
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
@@ -52,19 +59,28 @@ class PostViewHolder(
                 }.show()
             }
 
-            val url = "${PostRepositoryImpl.BASE_URL}/avatars/${post.authorAvatar}"
-            binding.avatar.load(url)
+            val avatarUrl = "${PostRepositoryImpl.BASE_URL}/avatars/${post.authorAvatar}"
+            binding.avatar.load(avatarUrl)
         }
     }
 
-    private fun ImageView.load(url: String, timeout : Int = 10_000){
-        Glide.with(this)
-            .load(url)
-            .circleCrop()
-            .error(R.drawable.ic_baseline_error_outline_48)
-            .placeholder(R.drawable.ic_baseline_downloading_48)
-            .timeout(timeout)
-            .into(this)
+    private fun ImageView.load(url: String, willCrop: Boolean = false, timeout: Int = 10_000) {
+        if (willCrop) {
+            Glide.with(this)
+                .load(url)
+                .circleCrop()
+                .error(R.drawable.ic_baseline_error_outline_48)
+                .placeholder(R.drawable.ic_baseline_downloading_48)
+                .timeout(timeout)
+                .into(this)
+        } else {
+            Glide.with(this)
+                .load(url)
+                .error(R.drawable.ic_baseline_error_outline_48)
+                .placeholder(R.drawable.ic_baseline_downloading_48)
+                .timeout(timeout)
+                .into(this)
+        }
     }
 
     private fun formattingBigNumbers(number: Long): String {

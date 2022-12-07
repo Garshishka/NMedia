@@ -15,7 +15,7 @@
     <string name="chooser_share_post">Share</string>
     <string name="error_empty_content">Content can\'t be empty</string>
     <string name="add_post">Add post</string>
-    <string name="attached_video">Attached Video</string>
+    <string name="attached_content">Attached</string>
     <string name="play_video">Play video</string>
     <string name="google_play_unavailable">Google play is unavailable</string>
     <string name="channel_remote_name">Channel name</string>
