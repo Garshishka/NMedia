@@ -35,7 +35,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun load() {
         _data.postValue(FeedModel(loading = true))
-        repository.getAllAsync(object : PostRepository.GetAllCallback {
+        repository.getAll(object : PostRepository.GetAllCallback {
             override fun onSuccess(posts: List<Post>) {
                 _data.postValue(
                     FeedModel(
@@ -57,7 +57,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun save() {
         edited.value?.let {
-            repository.saveAsync(it, object : PostRepository.SaveCallback {
+            repository.save(it, object : PostRepository.SaveCallback {
                 override fun onSuccess(post: Post) {
                     _postCreated.postValue(Unit)
                 }
@@ -84,7 +84,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun likeById(id: Long, likedByMe: Boolean) {
-        repository.likeByIdAsync(id, !likedByMe, object : PostRepository.LikeCallback {
+        repository.likeById(id, !likedByMe, object : PostRepository.LikeCallback {
             override fun onSuccess(post: Post) {
                 val newPosts =
                     (_data.value?.posts.orEmpty().map { if (it.id == id) post else it })
@@ -104,7 +104,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         val filtered = old?.posts.orEmpty().filter { it.id != id }
         _data.postValue(old?.copy(posts = filtered, empty = filtered.isEmpty()))
 
-        repository.removeByIdAsync(id, object : PostRepository.RemoveCallback {
+        repository.removeById(id, object : PostRepository.RemoveCallback {
             override fun onSuccess() {
             }
 

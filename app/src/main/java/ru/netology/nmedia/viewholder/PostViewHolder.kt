@@ -6,6 +6,7 @@ import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.netology.nmedia.AttachmentType
+import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.Post
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.PostLayoutBinding
@@ -31,7 +32,7 @@ class PostViewHolder(
 
             if (post.attachment != null) {
                 attachmentPicture.visibility = View.VISIBLE
-                val attachmentUrl = "${PostRepositoryImpl.BASE_URL}/images/${post.attachment.url}"
+                val attachmentUrl = "${BuildConfig.BASE_URL}/images/${post.attachment.url}"
                 binding.attachmentPicture.load(attachmentUrl)
                 if (post.attachment.type == AttachmentType.IMAGE) {
                     playButton.visibility = View.GONE
@@ -59,28 +60,19 @@ class PostViewHolder(
                 }.show()
             }
 
-            val avatarUrl = "${PostRepositoryImpl.BASE_URL}/avatars/${post.authorAvatar}"
+            val avatarUrl = "${BuildConfig.BASE_URL}/avatars/${post.authorAvatar}"
             binding.avatar.load(avatarUrl)
         }
     }
 
     private fun ImageView.load(url: String, willCrop: Boolean = false, timeout: Int = 10_000) {
-        if (willCrop) {
             Glide.with(this)
                 .load(url)
-                .circleCrop()
+                .apply{if(willCrop)circleCrop()}
                 .error(R.drawable.ic_baseline_error_outline_48)
                 .placeholder(R.drawable.ic_baseline_downloading_48)
                 .timeout(timeout)
                 .into(this)
-        } else {
-            Glide.with(this)
-                .load(url)
-                .error(R.drawable.ic_baseline_error_outline_48)
-                .placeholder(R.drawable.ic_baseline_downloading_48)
-                .timeout(timeout)
-                .into(this)
-        }
     }
 
     private fun formattingBigNumbers(number: Long): String {
