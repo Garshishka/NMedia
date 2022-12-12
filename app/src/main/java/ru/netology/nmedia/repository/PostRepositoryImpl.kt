@@ -41,6 +41,7 @@ class PostRepositoryImpl() : PostRepository {
 
                 override fun onFailure(call: Call<List<Post>>, t: Throwable) {
                     callback.onError(java.lang.Exception(t).toString())
+
                 }
             })
     }
