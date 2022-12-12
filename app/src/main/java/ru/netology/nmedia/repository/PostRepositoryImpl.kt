@@ -28,19 +28,19 @@ class PostRepositoryImpl() : PostRepository {
                 override fun onResponse(call: Call<List<Post>>, response: Response<List<Post>>) {
                     try {
                         if (!response.isSuccessful) {
-                            callback.onError(RuntimeException(response.message()))
+                            callback.onError(response.code().toString())
                             return
                         }
                         callback.onSuccess(
                             response.body() ?: throw RuntimeException("body is null")
                         )
                     } catch (e: Exception) {
-                        callback.onError(e)
+                        callback.onError(e.toString())
                     }
                 }
 
                 override fun onFailure(call: Call<List<Post>>, t: Throwable) {
-                    callback.onError(java.lang.Exception(t))
+                    callback.onError(java.lang.Exception(t).toString())
                 }
             })
     }
@@ -51,47 +51,47 @@ class PostRepositoryImpl() : PostRepository {
                 override fun onResponse(call: Call<Post>, response: Response<Post>) {
                     try {
                         if (!response.isSuccessful) {
-                            callback.onError(RuntimeException(response.message()))
+                            callback.onError(response.code().toString())
                             return
                         }
                         callback.onSuccess(
                             response.body() ?: throw RuntimeException("body is null")
                         )
                     } catch (e: Exception) {
-                        callback.onError(e)
+                        callback.onError(e.toString())
                     }
                 }
 
                 override fun onFailure(call: Call<Post>, t: Throwable) {
-                    callback.onError(java.lang.Exception(t))
+                    callback.onError(java.lang.Exception(t).toString())
                 }
             })
 
     }
 
     override fun likeById(id: Long, willLike: Boolean, callback: PostRepository.LikeCallback) {
-        val request = if(willLike)
+        val request = if (willLike)
             PostsApi.retrofitService.likeById(id)
         else
             PostsApi.retrofitService.unlikeById(id)
 
-        request.enqueue(object : Callback<Post>{
+        request.enqueue(object : Callback<Post> {
             override fun onResponse(call: Call<Post>, response: Response<Post>) {
-                try{
-                    if(!response.isSuccessful){
-                        callback.onError(RuntimeException(response.message()))
+                try {
+                    if (!response.isSuccessful) {
+                        callback.onError(response.code().toString())
                         return
                     }
                     callback.onSuccess(
-                        response.body()?: throw RuntimeException ("body is null")
+                        response.body() ?: throw RuntimeException("body is null")
                     )
-                } catch (e: Exception){
-                    callback.onError(e)
+                } catch (e: Exception) {
+                    callback.onError(e.toString())
                 }
             }
 
             override fun onFailure(call: Call<Post>, t: Throwable) {
-                callback.onError(java.lang.Exception(t))
+                callback.onError(java.lang.Exception(t).toString())
             }
         })
     }
@@ -104,11 +104,15 @@ class PostRepositoryImpl() : PostRepository {
         PostsApi.retrofitService.removeById(id)
             .enqueue(object : Callback<Unit> {
                 override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
+                    if (!response.isSuccessful) {
+                        callback.onError(response.code().toString())
+                        return
+                    }
                     callback.onSuccess()
                 }
 
                 override fun onFailure(call: Call<Unit>, t: Throwable) {
-                    callback.onError(java.lang.Exception(t))
+                    callback.onError(java.lang.Exception(t).toString())
                 }
 
             })
