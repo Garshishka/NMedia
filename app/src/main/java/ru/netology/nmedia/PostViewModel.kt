@@ -26,6 +26,13 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     private val _postCreated = SingleLiveEvent<Unit>()
     val postCreated: LiveData<Unit>
         get() = _postCreated
+    private val _postCreatedError = SingleLiveEvent<String>()
+    val postCreatedError: LiveData<String>
+        get() = _postCreatedError
+    private val _postsEditError = SingleLiveEvent<String>()
+    val postsEditError: LiveData<String>
+        get() = _postsEditError
+
 
     var draft = ""
 
@@ -45,8 +52,8 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 )
             }
 
-            override fun onError(e: Exception) {
-                _data.postValue(FeedModel(error = true))
+            override fun onError(e: String) {
+                _data.postValue(FeedModel(error = true, errorText = e))
             }
         })
     }
@@ -62,8 +69,8 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                     _postCreated.postValue(Unit)
                 }
 
-                override fun onError(e: Exception) {
-                    e.printStackTrace()
+                override fun onError(e: String) {
+                    _postCreatedError.postValue(e)
                 }
             })
         }
@@ -91,8 +98,8 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 _data.postValue(_data.value?.copy(posts = newPosts, empty = newPosts.isEmpty()))
             }
 
-            override fun onError(e: Exception) {
-                e.printStackTrace()
+            override fun onError(e: String) {
+                _postsEditError.postValue(e)
             }
         })
     }
@@ -108,9 +115,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             override fun onSuccess() {
             }
 
-            override fun onError(e: Exception) {
-                e.printStackTrace()
+            override fun onError(e: String) {
                 _data.postValue(old)
+                _postsEditError.postValue(e)
             }
         })
     }

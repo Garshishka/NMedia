@@ -10,7 +10,6 @@ import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.Post
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.PostLayoutBinding
-import ru.netology.nmedia.repository.PostRepositoryImpl
 
 
 class PostViewHolder(
@@ -66,13 +65,13 @@ class PostViewHolder(
     }
 
     private fun ImageView.load(url: String, willCrop: Boolean = false, timeout: Int = 10_000) {
-            Glide.with(this)
-                .load(url)
-                .apply{if(willCrop)circleCrop()}
-                .error(R.drawable.ic_baseline_error_outline_48)
-                .placeholder(R.drawable.ic_baseline_downloading_48)
-                .timeout(timeout)
-                .into(this)
+        Glide.with(this)
+            .load(url)
+            .apply { if (willCrop) circleCrop() }
+            .error(R.drawable.ic_baseline_error_outline_48)
+            .placeholder(R.drawable.ic_baseline_downloading_48)
+            .timeout(timeout)
+            .into(this)
     }
 
     private fun formattingBigNumbers(number: Long): String {
