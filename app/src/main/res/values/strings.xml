@@ -28,4 +28,5 @@
     <string name="specific_posting_error">Error code:%1$s\nTry sending the message again</string>
     <string name="retry">Retry loading</string>
     <string name="posts_empty">No posts exists</string>
+    <string name="not_on_server_yet">This post not on server yet</string>
 </resources>

@@ -108,6 +108,23 @@ class FeedFragment : Fragment() {
             }
         }
 
+        viewModel.postCreated.observe(viewLifecycleOwner) {
+            //binding.fab.isVisible = true
+        }
+
+        viewModel.postCreatedError.observe(viewLifecycleOwner) {
+            // binding.fab.isVisible = false
+            Snackbar.make(
+                binding.root,
+                getString(R.string.specific_posting_error, it),
+                Snackbar.LENGTH_LONG
+            )
+                .setAction("Retry post") {
+                    viewModel.load()
+                }
+                .show()
+        }
+
         viewModel.postsRemoveError.observe(viewLifecycleOwner) {
             val id = it.second
             Snackbar.make(
@@ -115,7 +132,7 @@ class FeedFragment : Fragment() {
                 getString(R.string.specific_edit_error, it.first),
                 Snackbar.LENGTH_LONG
             )
-                .setAction("Retry"){
+                .setAction("Retry") {
                     viewModel.removeById(id)
                 }
                 .show()
@@ -129,8 +146,8 @@ class FeedFragment : Fragment() {
                 getString(R.string.specific_edit_error, it.first),
                 Snackbar.LENGTH_LONG
             )
-                .setAction("Retry"){
-                    viewModel.likeById(id,willLike)
+                .setAction("Retry") {
+                    viewModel.likeById(id, willLike)
                 }
                 .show()
         }

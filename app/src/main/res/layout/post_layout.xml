@@ -145,5 +145,24 @@
         app:layout_constraintEnd_toStartOf="@id/viewsText"
         app:layout_constraintTop_toBottomOf="@id/barrierBottom" />
 
+    <ImageView
+        android:id="@+id/notOnServer"
+        android:layout_width="@dimen/pictureSize"
+        android:layout_height="@dimen/pictureSize"
+        android:contentDescription="@string/not_on_server_yet"
+        android:src="@drawable/ic_baseline_error_outline_48"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barrierBottom"
+        />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/bottomGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="viewsIcon, viewsText, like, share"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
