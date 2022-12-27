@@ -4,8 +4,13 @@ import ru.netology.nmedia.Post
 
 data class FeedModel(
     val posts: List<Post> = emptyList(),
-    val loading: Boolean = false,
-    val error: Boolean = false,
+    val empty: Boolean = false,
     val errorText: String = "Some error happened",
-    val empty: Boolean = false
 )
+
+sealed interface FeedModelState {
+    object Idle : FeedModelState
+    object Error : FeedModelState
+    object Refreshing : FeedModelState
+    object Loading : FeedModelState
+}

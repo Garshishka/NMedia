@@ -10,12 +10,14 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.Post
 import ru.netology.nmedia.PostViewModel
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.activity.SinglePostFragment.Companion.idArg
 import ru.netology.nmedia.databinding.FragmentFeedBinding
+import ru.netology.nmedia.model.FeedModelState
 import ru.netology.nmedia.viewholder.OnInteractionListener
 import ru.netology.nmedia.viewholder.PostsAdapter
 
@@ -86,14 +88,21 @@ class FeedFragment : Fragment() {
     private fun subscribe() {
         viewModel.data.observe(viewLifecycleOwner) { state ->
             adapter.submitList(state.posts)
-            binding.fab.isVisible = !state.loading && !state.error
-            binding.errorGroup.isVisible = state.error
-            if (state.error) {
-                binding.errorTitle.text = getString(R.string.specific_load_error, state.errorText)
-            }
-            binding.loading.isVisible = state.loading
             binding.empty.isVisible = state.empty
-            if (!state.loading) binding.swiper.isRefreshing = false
+        }
+
+        viewModel.dataState.observe(viewLifecycleOwner){ state ->
+            //binding.errorGroup.isVisible = state.error
+            binding.fab.isVisible = state is FeedModelState.Idle
+            binding.swiper.isRefreshing = state is FeedModelState.Refreshing
+            binding.loading.isVisible = state is FeedModelState.Loading
+            if (state is FeedModelState.Error){
+                Snackbar.make(binding.root, getString(R.string.specific_load_error, viewModel.data.value?.errorText), Snackbar.LENGTH_LONG)
+                    .setAction(R.string.retry){
+                        viewModel.load()
+                    }
+                    .show()
+            }
         }
 
         viewModel.postsEditError.observe(viewLifecycleOwner) {
@@ -106,7 +115,7 @@ class FeedFragment : Fragment() {
         }
 
         binding.swiper.setOnRefreshListener {
-            viewModel.load()
+            viewModel.load(true)
         }
 
         binding.retry.setOnClickListener {
