@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.Post
 import ru.netology.nmedia.PostViewModel
 import ru.netology.nmedia.R
@@ -82,12 +82,30 @@ class SinglePostFragment : Fragment() {
             viewHolder.bind(post)
         }
 
-        viewModel.postsEditError.observe(viewLifecycleOwner) {
-            Toast.makeText(
-                activity,
-                getString(R.string.specific_edit_error, it),
-                Toast.LENGTH_LONG
+        viewModel.postsRemoveError.observe(viewLifecycleOwner) {
+            val id = it.second
+            Snackbar.make(
+                binding.root,
+                getString(R.string.specific_edit_error, it.first),
+                Snackbar.LENGTH_LONG
             )
+                .setAction("Retry"){
+                    viewModel.removeById(id)
+                }
+                .show()
+        }
+
+        viewModel.postsLikeError.observe(viewLifecycleOwner) {
+            val id = it.second.first
+            val willLike = it.second.second
+            Snackbar.make(
+                binding.root,
+                getString(R.string.specific_edit_error, it.first),
+                Snackbar.LENGTH_LONG
+            )
+                .setAction("Retry"){
+                    viewModel.likeById(id,willLike)
+                }
                 .show()
         }
 

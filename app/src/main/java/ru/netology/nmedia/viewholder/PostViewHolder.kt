@@ -60,7 +60,7 @@ class PostViewHolder(
             }
 
             val avatarUrl = "${BuildConfig.BASE_URL}/avatars/${post.authorAvatar}"
-            binding.avatar.load(avatarUrl)
+            binding.avatar.load(avatarUrl, true)
         }
     }
 
