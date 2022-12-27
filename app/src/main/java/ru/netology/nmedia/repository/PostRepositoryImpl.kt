@@ -31,7 +31,6 @@ class PostRepositoryImpl(
             throw RuntimeException(response.code().toString())
         }
         val posts = response.body() ?: throw RuntimeException("body is null")
-
         postDao.insert(posts.map(PostEntity.Companion::fromDto))
     }
 
