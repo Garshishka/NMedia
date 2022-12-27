@@ -22,10 +22,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: PostRepository =
         PostRepositoryImpl(AppDb.getInstance(application).postDao())
     val edited = MutableLiveData(empty)
-    private val _data = MutableLiveData(FeedModel())
     val data: LiveData<FeedModel>
         get() = repository.data.map {
-            FeedModel(it,it.isEmpty())
+            FeedModel(it, it.isEmpty())
         }
     private val _dataState = MutableLiveData<FeedModelState>(FeedModelState.Idle)
     val dataState: LiveData<FeedModelState>
@@ -37,9 +36,12 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     private val _postCreatedError = SingleLiveEvent<String>()
     val postCreatedError: LiveData<String>
         get() = _postCreatedError
-    private val _postsEditError = SingleLiveEvent<String>()
-    val postsEditError: LiveData<String>
-        get() = _postsEditError
+    private val _postsRemoveError = SingleLiveEvent<Pair<String, Long>>()
+    val postsRemoveError: LiveData<Pair<String, Long>>
+        get() = _postsRemoveError
+    private val _postsLikeError = SingleLiveEvent<Pair<String, Pair<Long, Boolean>>>()
+    val postsLikeError: LiveData<Pair<String, Pair<Long, Boolean>>>
+        get() = _postsLikeError
 
     var draft = ""
 
@@ -48,11 +50,11 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun load(isRefreshing: Boolean = false) = viewModelScope.launch {
-        _dataState.value = if(isRefreshing) FeedModelState.Refreshing else FeedModelState.Loading
+        _dataState.value = if (isRefreshing) FeedModelState.Refreshing else FeedModelState.Loading
         try {
             repository.getAll()
             _dataState.value = FeedModelState.Idle
-        } catch (e: Exception){
+        } catch (e: Exception) {
             _dataState.value = FeedModelState.Error
         }
     }
@@ -61,7 +63,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         edited.value = empty
     }
 
-    fun save() = viewModelScope.launch{
+    fun save() = viewModelScope.launch {
         edited.value?.let {
             repository.save(it)
             _postCreated.postValue(Unit)
@@ -85,16 +87,20 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun likeById(id: Long, likedByMe: Boolean) = viewModelScope.launch {
-        repository.likeById(id, !likedByMe, )
+        try {
+            repository.likeById(id, !likedByMe)
+        } catch (e: Exception) {
+            _postsLikeError.postValue(e.toString() to (id to likedByMe))
+        }
     }
 
-    fun shareById(id: Long) = viewModelScope.launch {  repository.shareById(id)}
+    fun shareById(id: Long) = viewModelScope.launch { repository.shareById(id) }
 
     fun removeById(id: Long) = viewModelScope.launch {
-        val old = _data.value
-        val filtered = old?.posts.orEmpty().filter { it.id != id }
-        _data.postValue(old?.copy(posts = filtered, empty = filtered.isEmpty()))
-
-        repository.removeById(id, )
+        try {
+            repository.removeById(id)
+        } catch (e: Exception) {
+            _postsRemoveError.postValue(e.message.toString() to id)
+        }
     }
 }

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -91,26 +90,48 @@ class FeedFragment : Fragment() {
             binding.empty.isVisible = state.empty
         }
 
-        viewModel.dataState.observe(viewLifecycleOwner){ state ->
+        viewModel.dataState.observe(viewLifecycleOwner) { state ->
             //binding.errorGroup.isVisible = state.error
             binding.fab.isVisible = state is FeedModelState.Idle
             binding.swiper.isRefreshing = state is FeedModelState.Refreshing
             binding.loading.isVisible = state is FeedModelState.Loading
-            if (state is FeedModelState.Error){
-                Snackbar.make(binding.root, getString(R.string.specific_load_error, viewModel.data.value?.errorText), Snackbar.LENGTH_LONG)
-                    .setAction(R.string.retry){
+            if (state is FeedModelState.Error) {
+                Snackbar.make(
+                    binding.root,
+                    getString(R.string.specific_load_error, viewModel.data.value?.errorText),
+                    Snackbar.LENGTH_LONG
+                )
+                    .setAction(R.string.retry) {
                         viewModel.load()
                     }
                     .show()
             }
         }
 
-        viewModel.postsEditError.observe(viewLifecycleOwner) {
-            Toast.makeText(
-                activity,
-                getString(R.string.specific_edit_error, it),
-                Toast.LENGTH_LONG
+        viewModel.postsRemoveError.observe(viewLifecycleOwner) {
+            val id = it.second
+            Snackbar.make(
+                binding.root,
+                getString(R.string.specific_edit_error, it.first),
+                Snackbar.LENGTH_LONG
             )
+                .setAction("Retry"){
+                    viewModel.removeById(id)
+                }
+                .show()
+        }
+
+        viewModel.postsLikeError.observe(viewLifecycleOwner) {
+            val id = it.second.first
+            val willLike = it.second.second
+            Snackbar.make(
+                binding.root,
+                getString(R.string.specific_edit_error, it.first),
+                Snackbar.LENGTH_LONG
+            )
+                .setAction("Retry"){
+                    viewModel.likeById(id,willLike)
+                }
                 .show()
         }
 

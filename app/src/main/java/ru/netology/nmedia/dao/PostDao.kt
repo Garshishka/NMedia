@@ -11,10 +11,13 @@ interface PostDao {
     @Query("SELECT * FROM PostEntity ORDER BY id DESC")
     fun getAll(): LiveData<List<PostEntity>>
 
-    @Insert (onConflict = REPLACE)
+    @Query("SELECT * FROM PostEntity WHERE id = :id")
+    suspend fun getById(id: Long): PostEntity
+
+    @Insert(onConflict = REPLACE)
     suspend fun insert(post: PostEntity)
 
-    @Insert (onConflict = REPLACE)
+    @Insert(onConflict = REPLACE)
     suspend fun insert(posts: List<PostEntity>)
 
     @Query("UPDATE PostEntity SET content = :content WHERE id = :id")
@@ -33,11 +36,13 @@ interface PostDao {
     )
     suspend fun likeById(id: Long)
 
-    @Query("""
+    @Query(
+        """
         UPDATE PostEntity SET
         sharesAmount = sharesAmount+1
         WHERE id = :id
-    """)
+    """
+    )
     suspend fun shareById(id: Long)
 
     @Query("DELETE FROM PostEntity WHERE id = :id")
