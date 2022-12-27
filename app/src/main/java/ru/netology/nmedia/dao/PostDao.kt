@@ -11,6 +11,9 @@ interface PostDao {
     @Query("SELECT * FROM PostEntity ORDER BY id DESC")
     fun getAll(): LiveData<List<PostEntity>>
 
+    @Query("SELECT * FROM PostEntity WHERE notOnServer = 1")
+    suspend fun getAllUnsent(): List<PostEntity>
+
     @Query("SELECT * FROM PostEntity WHERE id = :id")
     suspend fun getById(id: Long): PostEntity
 
@@ -24,7 +27,10 @@ interface PostDao {
     suspend fun updateContentByID(id: Long, content: String)
 
     suspend fun save(post: PostEntity) =
-        if (post.id == 0L) insert(post) else updateContentByID(post.id, post.content)
+        if (post.id == 0L ) insert(post) else updateContentByID(
+            post.id,
+            post.content
+        )
 
     @Query(
         """

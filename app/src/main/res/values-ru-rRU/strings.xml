@@ -29,4 +29,5 @@
     <string name="specific_posting_error">Код ошибки:%1$s\nПопробуйте отправить сообщение снова</string>
     <string name="retry">Повторить загрузку</string>
     <string name="posts_empty">Посты отсутствуют</string>
+    <string name="not_on_server_yet">Этот пост еще не на сервере</string>
 </resources>

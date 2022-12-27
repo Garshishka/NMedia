@@ -6,7 +6,6 @@ import ru.netology.nmedia.Post
 import ru.netology.nmedia.api.PostsApi
 import ru.netology.nmedia.dao.PostDao
 import ru.netology.nmedia.dao.PostEntity
-import java.io.IOException
 
 class PostRepositoryImpl(
     private val postDao: PostDao
@@ -23,23 +22,23 @@ class PostRepositoryImpl(
         }
         val posts = response.body() ?: throw RuntimeException("body is null")
         postDao.insert(posts.map(PostEntity.Companion::fromDto))
+
+        postDao.getAllUnsent().forEach { save(it.toDto()) }
     }
 
     override suspend fun save(post: Post) {
+        postDao.save(PostEntity.fromDto(post, true))
         try {
             val response = PostsApi.retrofitService.save(post)
             if (!response.isSuccessful) {
                 throw  RuntimeException(
                     response.code().toString()
-                )//ApiError(response.code(), response.message())
+                )
             }
-
             val body = response.body() ?: throw RuntimeException("body is null")
             postDao.insert(PostEntity.fromDto(body))
-        } catch (e: IOException) {
-            //throw NetworkError
         } catch (e: Exception) {
-            // throw UnknownError
+            throw RuntimeException(e)
         }
     }
 

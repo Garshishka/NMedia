@@ -40,6 +40,16 @@ class PostViewHolder(
                 }
             } else attachmentPicture.visibility = View.GONE
 
+            if(post.author == "Me"){
+                notOnServer.visibility = View.VISIBLE
+                bottomGroup.visibility = View.GONE
+            }
+            else
+            {
+                notOnServer.visibility = View.GONE
+                bottomGroup.visibility = View.VISIBLE
+            }
+
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
                     inflate(R.menu.options_post)

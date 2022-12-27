@@ -21,6 +21,7 @@ data class PostEntity(
     val attachmentUrl: String,
     val attachmentDescription: String,
     val attachmentType: String = "NONE",
+    val notOnServer: Boolean = false
 ) {
     fun toDto() = Post(
         id,
@@ -41,7 +42,7 @@ data class PostEntity(
     )
 
     companion object {
-        fun fromDto(dto: Post) =
+        fun fromDto(dto: Post, notOnServer: Boolean = false) =
             PostEntity(
                 dto.id,
                 dto.author,
@@ -54,7 +55,8 @@ data class PostEntity(
                 dto.views,
                 dto.attachment?.url ?: "",
                 dto.attachment?.description ?: "",
-                if (dto.attachment?.type == AttachmentType.IMAGE) "IMAGE" else "NONE"
+                if (dto.attachment?.type == AttachmentType.IMAGE) "IMAGE" else "NONE",
+                notOnServer
             )
     }
 }

@@ -33,8 +33,8 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     private val _postCreated = SingleLiveEvent<Unit>()
     val postCreated: LiveData<Unit>
         get() = _postCreated
-    private val _postCreatedError = SingleLiveEvent<String>()
-    val postCreatedError: LiveData<String>
+    private val _postCreatedError = SingleLiveEvent<Pair<String,Post>>()
+    val postCreatedError: LiveData<Pair<String,Post>>
         get() = _postCreatedError
     private val _postsRemoveError = SingleLiveEvent<Pair<String, Long>>()
     val postsRemoveError: LiveData<Pair<String, Long>>
@@ -65,11 +65,14 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun save() = viewModelScope.launch {
         edited.value?.let {
-            repository.save(it)
-            _postCreated.postValue(Unit)
-            //_postCreated.value = Unit
+            try {
+                repository.save(it)
+                _postCreated.postValue(Unit)
+                empty()
+            } catch (e: Exception) {
+                _postCreatedError.postValue(e.message.toString() to it)
+            }
         }
-        empty()
     }
 
     fun edit(post: Post) {
