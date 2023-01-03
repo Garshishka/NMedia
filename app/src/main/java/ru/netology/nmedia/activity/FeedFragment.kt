@@ -90,6 +90,17 @@ class FeedFragment : Fragment() {
             binding.empty.isVisible = state.empty
         }
 
+        viewModel.newerCount.observe(viewLifecycleOwner){
+            if(it>0){
+                binding.newerPostsButton.isVisible = true
+                binding.newerPostsButton.text = getString(R.string.newer_posts,it.toString())
+            }
+            else{
+                binding.newerPostsButton.isVisible = false
+            }
+            println("Newer count $it")
+        }
+
         viewModel.dataState.observe(viewLifecycleOwner) { state ->
             //binding.errorGroup.isVisible = state.error
             binding.fab.isVisible = state is FeedModelState.Idle
@@ -158,6 +169,11 @@ class FeedFragment : Fragment() {
 
         binding.retry.setOnClickListener {
             viewModel.load()
+        }
+
+        binding.newerPostsButton.setOnClickListener{
+            binding.newerPostsButton.isVisible = false
+            viewModel.showNewPosts()
         }
 
         binding.fab.setOnClickListener {

@@ -1,18 +1,35 @@
 package ru.netology.nmedia.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.map
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 import ru.netology.nmedia.Post
 import ru.netology.nmedia.api.PostsApi
 import ru.netology.nmedia.dao.PostDao
 import ru.netology.nmedia.dao.PostEntity
+import ru.netology.nmedia.dao.toDto
+import ru.netology.nmedia.dao.toEntity
 
 class PostRepositoryImpl(
     private val postDao: PostDao
 ) : PostRepository {
 
-    override val data: LiveData<List<Post>> = postDao.getAll().map {
-        it.map(PostEntity::toDto)
+    override val data = postDao.getAll().map(List<PostEntity>::toDto)
+        .flowOn(Dispatchers.Default)
+
+    override fun getNewerCount(id: Long): Flow<Int> = flow {
+        delay(10_000)
+        while (true) {
+            val response = PostsApi.retrofitService.getNewer(id)
+            val newPosts = response.body() ?: error("Empty response")
+            postDao.insert(newPosts.toEntity(false))
+            emit(newPosts.size)
+            delay(10_000)
+        }
+    }
+
+    override suspend fun showNewPosts() {
+        postDao.showUnseen()
     }
 
     override suspend fun getAll() {

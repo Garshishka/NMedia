@@ -30,4 +30,5 @@
     <string name="retry">Повторить загрузку</string>
     <string name="posts_empty">Посты отсутствуют</string>
     <string name="not_on_server_yet">Этот пост еще не на сервере</string>
+    <string name="newer_posts">Появилось новых постов: %1$s</string>
 </resources>
