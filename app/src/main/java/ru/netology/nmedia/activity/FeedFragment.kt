@@ -90,6 +90,11 @@ class FeedFragment : Fragment() {
             binding.empty.isVisible = state.empty
         }
 
+        viewModel.newerCount.observe(viewLifecycleOwner){
+            //TODO
+            println("Newer count $it")
+        }
+
         viewModel.dataState.observe(viewLifecycleOwner) { state ->
             //binding.errorGroup.isVisible = state.error
             binding.fab.isVisible = state is FeedModelState.Idle
