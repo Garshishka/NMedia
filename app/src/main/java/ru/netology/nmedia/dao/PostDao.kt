@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PostDao {
-    @Query("SELECT * FROM PostEntity ORDER BY id DESC")
+    @Query("SELECT * FROM PostEntity WHERE show = 1 ORDER BY id DESC")
     fun getAll(): Flow<List<PostEntity>>
 
     @Query("SELECT * FROM PostEntity WHERE notOnServer = 1")
@@ -31,6 +31,15 @@ interface PostDao {
             post.id,
             post.content
         )
+
+    @Query(
+        """
+        UPDATE PostEntity SET
+        show = 1
+        WHERE show = 0
+    """
+    )
+    suspend fun showUnseen()
 
     @Query(
         """

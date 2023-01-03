@@ -21,7 +21,8 @@ data class PostEntity(
     val attachmentUrl: String,
     val attachmentDescription: String,
     val attachmentType: String = "NONE",
-    val notOnServer: Boolean = false
+    val notOnServer: Boolean = false,
+    val show: Boolean = true,
 ) {
     fun toDto() = Post(
         id,
@@ -62,4 +63,5 @@ data class PostEntity(
 }
 
 fun List<PostEntity>.toDto(): List<Post> = map(PostEntity::toDto)
-fun List<Post>.toEntity(): List<PostEntity> = map(PostEntity::fromDto)
+fun List<Post>.toEntity(show: Boolean = true): List<PostEntity> = map(PostEntity::fromDto)
+    .map { it.copy(show = show) }

@@ -56,6 +56,10 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         load()
     }
 
+    fun showNewPosts() = viewModelScope.launch {
+        repository.showNewPosts()
+    }
+
     fun load(isRefreshing: Boolean = false) = viewModelScope.launch {
         _dataState.value = if (isRefreshing) FeedModelState.Refreshing else FeedModelState.Loading
         try {

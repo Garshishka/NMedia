@@ -18,13 +18,18 @@ class PostRepositoryImpl(
         .flowOn(Dispatchers.Default)
 
     override fun getNewerCount(id: Long): Flow<Int> = flow {
-        while (true){
-                delay(10_000)
-                val response = PostsApi.retrofitService.getNewer(id)
-                val newPosts = response.body()?: error("Empty response")
-                postDao.insert(newPosts.toEntity())
-                emit(newPosts.size)
+        delay(10_000)
+        while (true) {
+            val response = PostsApi.retrofitService.getNewer(id)
+            val newPosts = response.body() ?: error("Empty response")
+            postDao.insert(newPosts.toEntity(false))
+            emit(newPosts.size)
+            delay(10_000)
         }
+    }
+
+    override suspend fun showNewPosts() {
+        postDao.showUnseen()
     }
 
     override suspend fun getAll() {

@@ -29,4 +29,5 @@
     <string name="retry">Retry loading</string>
     <string name="posts_empty">No posts exists</string>
     <string name="not_on_server_yet">This post not on server yet</string>
+    <string name="newer_posts">There are %1$s new posts</string>
 </resources>
