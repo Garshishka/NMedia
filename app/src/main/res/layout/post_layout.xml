@@ -71,7 +71,7 @@
     <ImageButton
         android:id="@+id/attachmentPicture"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/video_height"
+        android:layout_height="wrap_content"
         android:src="@drawable/ic_baseline_video"
         app:layout_constraintTop_toBottomOf="@id/content"
         android:contentDescription="@string/attached_content"

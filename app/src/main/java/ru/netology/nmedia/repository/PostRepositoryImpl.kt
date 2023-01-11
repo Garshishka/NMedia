@@ -3,12 +3,18 @@ package ru.netology.nmedia.repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import ru.netology.nmedia.Attachment
+import ru.netology.nmedia.AttachmentType
+import ru.netology.nmedia.Media
 import ru.netology.nmedia.Post
 import ru.netology.nmedia.api.PostsApi
 import ru.netology.nmedia.dao.PostDao
 import ru.netology.nmedia.dao.PostEntity
 import ru.netology.nmedia.dao.toDto
 import ru.netology.nmedia.dao.toEntity
+import java.io.File
 
 class PostRepositoryImpl(
     private val postDao: PostDao
@@ -59,6 +65,33 @@ class PostRepositoryImpl(
         }
     }
 
+    private suspend fun upload(file: File): Media {
+        try {
+            val data = MultipartBody.Part.createFormData("file", file.name, file.asRequestBody())
+
+            val response = PostsApi.retrofitService.upload(data)
+            if (!response.isSuccessful) {
+                throw  RuntimeException(
+                    response.code().toString()
+                )
+            }
+            return response.body() ?: throw RuntimeException("body is null")
+        } catch (e: Exception) {
+            throw RuntimeException(e)
+        }
+    }
+
+    override suspend fun saveWithAttachment(post: Post, file: File) {
+        try {
+            val upload = upload(file)
+            val postWithAttachment =
+                post.copy(attachment = Attachment(upload.id, "photo", AttachmentType.IMAGE))
+            save(postWithAttachment)
+        } catch (e: Exception) {
+            throw RuntimeException(e)
+        }
+    }
+
     override suspend fun likeById(id: Long, willLike: Boolean): Post {
         postDao.likeById(id)
         try {
@@ -76,6 +109,7 @@ class PostRepositoryImpl(
             throw RuntimeException(e)
         }
     }
+
 
     override suspend fun shareById(id: Long) {
         //TODO

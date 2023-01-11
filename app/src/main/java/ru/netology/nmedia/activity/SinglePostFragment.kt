@@ -13,6 +13,7 @@ import ru.netology.nmedia.Post
 import ru.netology.nmedia.PostViewModel
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
+import ru.netology.nmedia.activity.PictureFragment.Companion.urlArg
 import ru.netology.nmedia.databinding.FragmentSinglePostBinding
 import ru.netology.nmedia.utils.LongArg
 import ru.netology.nmedia.viewholder.OnInteractionListener
@@ -50,6 +51,12 @@ class SinglePostFragment : Fragment() {
         override fun onRemove(post: Post) {
             viewModel.removeById(post.id)
             findNavController().navigateUp()
+        }
+
+        override fun onPictureClick(url: String) {
+            findNavController().navigate(R.id.action_feedFragment_to_pictureFragment,
+                Bundle().apply
+                { urlArg = url })
         }
 
         override fun onVideoClick(post: Post) {

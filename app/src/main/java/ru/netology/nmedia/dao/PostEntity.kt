@@ -1,5 +1,6 @@
 package ru.netology.nmedia.dao
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import ru.netology.nmedia.Attachment
@@ -18,9 +19,8 @@ data class PostEntity(
     val sharesAmount: Long = 0,
     val likedByMe: Boolean = false,
     val views: Long = 0,
-    val attachmentUrl: String,
-    val attachmentDescription: String,
-    val attachmentType: String = "NONE",
+    @Embedded
+    val attachment: AttachmentEmbedabble?,
     val notOnServer: Boolean = false,
     val show: Boolean = true,
 ) {
@@ -34,12 +34,7 @@ data class PostEntity(
         sharesAmount,
         likedByMe,
         views,
-        if (attachmentType == "IMAGE") Attachment(
-            attachmentUrl,
-            attachmentDescription,
-            AttachmentType.IMAGE
-        )
-        else null
+        attachment?.toDto()
     )
 
     companion object {
@@ -54,11 +49,22 @@ data class PostEntity(
                 dto.sharesAmount,
                 dto.likedByMe,
                 dto.views,
-                dto.attachment?.url ?: "",
-                dto.attachment?.description ?: "",
-                if (dto.attachment?.type == AttachmentType.IMAGE) "IMAGE" else "NONE",
-                notOnServer
+                AttachmentEmbedabble.fromDto(dto.attachment)
             )
+    }
+}
+
+data class AttachmentEmbedabble(
+    val url: String,
+    val description: String,
+    val type: AttachmentType
+) {
+    fun toDto() = Attachment(url, description, type)
+
+    companion object {
+        fun fromDto(dto: Attachment?) = dto?.let {
+            AttachmentEmbedabble(it.url, it.description, it.type)
+        }
     }
 }
 

@@ -31,4 +31,9 @@
     <string name="posts_empty">Посты отсутствуют</string>
     <string name="not_on_server_yet">Этот пост еще не на сервере</string>
     <string name="newer_posts">Появилось новых постов: %1$s</string>
+    <string name="save">Сохранить</string>
+    <string name="select_photo">Выбрать фото</string>
+    <string name="take_photo">Сделать фото</string>
+    <string name="picked_photo">Выбранное фото</string>
+    <string name="removePhoto">Удалить</string>
 </resources>
