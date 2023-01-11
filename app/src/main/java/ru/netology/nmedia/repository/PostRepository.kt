@@ -2,6 +2,7 @@ package ru.netology.nmedia.repository
 
 import kotlinx.coroutines.flow.Flow
 import ru.netology.nmedia.Post
+import java.io.File
 
 interface PostRepository {
     val data: Flow<List<Post>>
@@ -12,4 +13,5 @@ interface PostRepository {
     suspend fun removeById(id: Long)
     suspend fun shareById(id: Long)
     suspend fun likeById(id: Long, willLike: Boolean): Post
+    suspend fun saveWithAttachment(post: Post, file: File)
 }

@@ -31,7 +31,7 @@ class PostViewHolder(
 
             if (post.attachment != null) {
                 attachmentPicture.visibility = View.VISIBLE
-                val attachmentUrl = "${BuildConfig.BASE_URL}/images/${post.attachment.url}"
+                val attachmentUrl = "${BuildConfig.BASE_URL}/media/${post.attachment.url}"
                 binding.attachmentPicture.load(attachmentUrl)
                 if (post.attachment.type == AttachmentType.IMAGE) {
                     playButton.visibility = View.GONE
