@@ -14,6 +14,7 @@ import ru.netology.nmedia.Post
 import ru.netology.nmedia.PostViewModel
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
+import ru.netology.nmedia.activity.PictureFragment.Companion.urlArg
 import ru.netology.nmedia.activity.SinglePostFragment.Companion.idArg
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.model.FeedModelState
@@ -55,6 +56,12 @@ class FeedFragment : Fragment() {
             viewModel.removeById(post.id)
         }
 
+        override fun onPictureClick(url: String) {
+            findNavController().navigate(R.id.action_feedFragment_to_pictureFragment,
+                Bundle().apply
+                { urlArg = url })
+        }
+
         override fun onVideoClick(post: Post) {
             // val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.attachment.url))
             //startActivity(intent)
@@ -62,7 +69,8 @@ class FeedFragment : Fragment() {
         }
 
         override fun onPostClick(post: Post) {
-            findNavController().navigate(R.id.action_feedFragment_to_singlePostFragment,
+            findNavController().navigate(
+                R.id.action_feedFragment_to_singlePostFragment,
                 Bundle().apply
                 { idArg = post.id })
         }

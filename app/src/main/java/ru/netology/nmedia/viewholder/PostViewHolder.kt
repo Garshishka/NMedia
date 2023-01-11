@@ -34,18 +34,17 @@ class PostViewHolder(
                 val attachmentUrl = "${BuildConfig.BASE_URL}/media/${post.attachment.url}"
                 binding.attachmentPicture.load(attachmentUrl)
                 if (post.attachment.type == AttachmentType.IMAGE) {
+                    attachmentPicture.setOnClickListener { onInteractionListener.onPictureClick(post.attachment.url) }
                     playButton.visibility = View.GONE
                 } else {
                     attachmentPicture.setOnClickListener { onInteractionListener.onVideoClick(post) }
                 }
             } else attachmentPicture.visibility = View.GONE
 
-            if(post.author == "Me"){
+            if (post.author == "Me") {
                 notOnServer.visibility = View.VISIBLE
                 bottomGroup.visibility = View.GONE
-            }
-            else
-            {
+            } else {
                 notOnServer.visibility = View.GONE
                 bottomGroup.visibility = View.VISIBLE
             }
