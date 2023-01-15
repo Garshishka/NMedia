@@ -3,6 +3,7 @@ package ru.netology.nmedia.viewholder
 import android.view.View
 import android.widget.ImageView
 import android.widget.PopupMenu
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.netology.nmedia.AttachmentType
@@ -49,6 +50,7 @@ class PostViewHolder(
                 bottomGroup.visibility = View.VISIBLE
             }
 
+            menu.isVisible = post.ownedByMe
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
                     inflate(R.menu.options_post)
