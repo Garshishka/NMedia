@@ -12,6 +12,7 @@ import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.Media
 import ru.netology.nmedia.Post
 import ru.netology.nmedia.auth.AppAuth
+import ru.netology.nmedia.auth.AuthPair
 
 interface PostsApiService {
 
@@ -39,6 +40,13 @@ interface PostsApiService {
     @Multipart
     @POST("media")
     suspend fun upload(@Part file: MultipartBody.Part): Response<Media>
+
+    @FormUrlEncoded
+    @POST("users/authentication")
+    suspend fun updateUser(
+        @Field("login") login: String,
+        @Field("pass") pass: String
+    ): Response<AuthPair>
 }
 
 object PostsApi {
