@@ -21,6 +21,8 @@ data class PostEntity(
     val views: Long = 0,
     @Embedded
     val attachment: AttachmentEmbedabble?,
+    val authorId: Long = 0,
+
     val notOnServer: Boolean = false,
     val show: Boolean = true,
 ) {
@@ -34,7 +36,8 @@ data class PostEntity(
         sharesAmount,
         likedByMe,
         views,
-        attachment?.toDto()
+        attachment?.toDto(),
+        authorId = authorId
     )
 
     companion object {
@@ -49,7 +52,8 @@ data class PostEntity(
                 dto.sharesAmount,
                 dto.likedByMe,
                 dto.views,
-                AttachmentEmbedabble.fromDto(dto.attachment)
+                AttachmentEmbedabble.fromDto(dto.attachment),
+                authorId = dto.authorId
             )
     }
 }

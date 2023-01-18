@@ -4,8 +4,10 @@ import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.db.AppDb
 import ru.netology.nmedia.model.FeedModel
 import ru.netology.nmedia.model.FeedModelState
@@ -28,8 +30,15 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: PostRepository =
         PostRepositoryImpl(AppDb.getInstance(application).postDao())
     val edited = MutableLiveData(empty)
-    val data: LiveData<FeedModel>
-        get() = repository.data.map(::FeedModel).asLiveData(Dispatchers.Default)
+    val data: LiveData<FeedModel> = AppAuth.getInstance().state
+        .map { it?.id }
+        .flatMapLatest { id ->
+            repository.data
+                .map { posts ->
+                    FeedModel(posts.map { it.copy(ownedByMe = it.authorId == id) }, posts.isEmpty())
+                }
+        }.asLiveData(Dispatchers.Default)
+    //get() = repository.data.map(::FeedModel).asLiveData(Dispatchers.Default)
 
     val newerCount: LiveData<Int> = data.switchMap {
         val newerId = it.posts.firstOrNull()?.id ?: 0L

@@ -13,7 +13,9 @@ data class Post(
     val sharesAmount: Long = 0,
     val likedByMe: Boolean = false,
     val views: Long = 0,
-    val attachment: Attachment? = null
+    val attachment: Attachment? = null,
+    val ownedByMe: Boolean = false,
+    val authorId: Long = 0,
 )
 
 data class PhotoModel(val uri: Uri?, val file: File?)

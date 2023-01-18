@@ -61,7 +61,7 @@ class AppActivity : AppCompatActivity() {
 
         FirebaseMessaging.getInstance().token.addOnSuccessListener {
             println(it)
-           // Toast.makeText(this@AppActivity,it,Toast.LENGTH_LONG).show()
+            // Toast.makeText(this@AppActivity,it,Toast.LENGTH_LONG).show()
         }
     }
 }

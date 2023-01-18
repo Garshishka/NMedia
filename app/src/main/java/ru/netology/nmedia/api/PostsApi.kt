@@ -11,8 +11,9 @@ import retrofit2.http.*
 import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.Media
 import ru.netology.nmedia.Post
+import ru.netology.nmedia.auth.AppAuth
 
-interface PostsApiService{
+interface PostsApiService {
 
     @GET("posts")
     suspend fun getAll(): Response<List<Post>>
@@ -45,13 +46,23 @@ object PostsApi {
     private const val BASE_URL = "${BuildConfig.BASE_URL}/api/slow/"
 
     private val logging = HttpLoggingInterceptor().apply {
-        if(BuildConfig.DEBUG){
+        if (BuildConfig.DEBUG) {
             level = HttpLoggingInterceptor.Level.HEADERS
         }
     }
 
     private val client = OkHttpClient.Builder()
         .addInterceptor(logging)
+        .addInterceptor { chain ->
+            val request = AppAuth.getInstance().state.value?.token?.let {
+                chain.request()
+                    .newBuilder()
+                    .addHeader("Authorization", it)
+                    .build()
+            } ?: chain.request()
+
+            chain.proceed(request)
+        }
         .build()
 
     val retrofit = Retrofit.Builder()
@@ -60,7 +71,7 @@ object PostsApi {
         .baseUrl(BASE_URL)
         .build()
 
-    val retrofitService by lazy{
+    val retrofitService by lazy {
         retrofit.create<PostsApiService>()
     }
 }
