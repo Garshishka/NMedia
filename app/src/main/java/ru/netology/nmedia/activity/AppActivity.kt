@@ -17,7 +17,6 @@ import com.google.firebase.messaging.FirebaseMessaging
 import ru.netology.nmedia.AuthViewModel
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
-import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.ActivityAppBinding
 
 class AppActivity : AppCompatActivity() {
@@ -77,8 +76,7 @@ class AppActivity : AppCompatActivity() {
                 true
             }
             R.id.signUp -> {
-                //TODO HW
-                AppAuth.getInstance().setAuth(5, "x-token")
+                findNavController(R.id.fragment_container).navigate(R.id.action_sign_up)
                 true
             }
             else -> super.onOptionsItemSelected(item)
