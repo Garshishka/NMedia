@@ -15,6 +15,7 @@ import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.PostViewModel
 import ru.netology.nmedia.R
+import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.FragmentNewPostBinding
 import ru.netology.nmedia.utils.AndroidUtils
 import ru.netology.nmedia.utils.StringArg
@@ -28,7 +29,6 @@ class NewPostFragment : Fragment() {
         val viewModel by viewModels<PostViewModel>(ownerProducer = ::requireParentFragment)
         val isEditing = arguments?.textArg != null
         val binding = FragmentNewPostBinding.inflate(inflater, container, false)
-
         val contract =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 val resultCode = result.resultCode
@@ -100,6 +100,10 @@ class NewPostFragment : Fragment() {
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
+                    R.id.logOut -> {
+                        binding.logOutTab.isVisible = true
+                        true
+                    }
                     R.id.save -> {
                         viewModel.draft = ""
                         val text = binding.edit.text.toString()
@@ -115,6 +119,15 @@ class NewPostFragment : Fragment() {
                 }
             }
         }, viewLifecycleOwner)
+
+        binding.goBackButton.setOnClickListener {
+            binding.logOutTab.isVisible = false
+        }
+
+        binding.logOutButton.setOnClickListener {
+            AppAuth.getInstance().removeAuth()
+            findNavController().navigateUp()
+        }
         return binding.root
     }
 
