@@ -52,7 +52,6 @@ class NewPostFragment : Fragment() {
                 }
             }
 
-
         if (isEditing) {
             arguments?.textArg.let(binding.edit::setText)
             viewModel.draft = ""

@@ -12,61 +12,60 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <TextView
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_margin="@dimen/marginDefault"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/username"/>
+            android:hint="@string/username">
 
-        <EditText
-            android:id="@+id/usernameInput"
-            android:layout_width="@dimen/text_input"
-            android:layout_height="@dimen/descriptor_size"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/usernameInput"
+                android:layout_width="@dimen/text_input"
+                android:layout_height="wrap_content"
+                android:autofillHints="name"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_margin="@dimen/marginDefault"
-            android:autofillHints="name"
-            android:background="@color/white"
-            android:inputType="text" />
-
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/login" />
+            android:hint="@string/login">
 
-        <EditText
-            android:id="@+id/loginInput"
-            android:layout_width="@dimen/text_input"
-            android:layout_height="@dimen/descriptor_size"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/loginInput"
+                android:layout_width="@dimen/text_input"
+                android:layout_height="wrap_content"
+                android:autofillHints="username"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_margin="@dimen/marginDefault"
-            android:autofillHints="username"
-            android:background="@color/white"
-            android:inputType="text" />
-
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/password" />
+            android:hint="@string/password">
 
-        <EditText
-            android:id="@+id/passwordInput"
-            android:layout_width="@dimen/text_input"
-            android:layout_height="@dimen/descriptor_size"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/passwordInput"
+                android:layout_width="@dimen/text_input"
+                android:layout_height="wrap_content"
+                android:autofillHints="password"
+                android:inputType="textPassword"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_margin="@dimen/marginDefault"
-            android:autofillHints="password"
-            android:background="@color/white"
-            android:inputType="textPassword" />
-
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/repeat_password" />
+            android:hint="@string/repeat_password">
 
-        <EditText
-            android:id="@+id/repeatPasswordInput"
-            android:layout_width="@dimen/text_input"
-            android:layout_height="@dimen/descriptor_size"
-            android:layout_margin="@dimen/marginDefault"
-            android:autofillHints="password"
-            android:background="@color/white"
-            android:inputType="textPassword" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/repeatPasswordInput"
+                android:layout_width="@dimen/text_input"
+                android:layout_height="wrap_content"
+                android:autofillHints="password"
+                android:inputType="textPassword"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/signUpButton"

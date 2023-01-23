@@ -17,6 +17,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import ru.netology.nmedia.AuthViewModel
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
+import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.ActivityAppBinding
 
 class AppActivity : AppCompatActivity() {
@@ -69,7 +70,12 @@ class AppActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.logOut -> {
-                false
+                if (findNavController(R.id.fragment_container).currentDestination?.id == R.id.newPostFragment) {
+                    false
+                } else {
+                    AppAuth.getInstance().removeAuth()
+                    true
+                }
             }
             R.id.signIn -> {
                 findNavController(R.id.fragment_container).navigate(R.id.action_sign_in)

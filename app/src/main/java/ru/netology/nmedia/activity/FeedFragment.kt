@@ -3,8 +3,9 @@ package ru.netology.nmedia.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.*
-import androidx.core.view.MenuProvider
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -16,7 +17,6 @@ import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.activity.PictureFragment.Companion.urlArg
 import ru.netology.nmedia.activity.SinglePostFragment.Companion.idArg
-import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.model.FeedModelState
 import ru.netology.nmedia.viewholder.OnInteractionListener
@@ -206,20 +206,5 @@ class FeedFragment : Fragment() {
         binding.goBackButton.setOnClickListener {
             binding.signInTab.isVisible = false
         }
-
-        activity?.addMenuProvider(object : MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return when (menuItem.itemId) {
-                    R.id.logOut -> {
-                        AppAuth.getInstance().removeAuth()
-                        true
-                    }
-                    else -> false
-                }
-            }
-        }, viewLifecycleOwner)
     }
 }
