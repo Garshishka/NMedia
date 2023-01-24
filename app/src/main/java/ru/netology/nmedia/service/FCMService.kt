@@ -14,7 +14,6 @@ import ru.netology.nmedia.auth.AppAuth
 import kotlin.random.Random
 
 
-
 class FCMService : FirebaseMessagingService() {
 
     private val action = "action"
@@ -38,10 +37,6 @@ class FCMService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
-        val userId = AppAuth.getInstance().state.value?.id
-        // TODO HW
-        //val recipientId = TODO()
-
         message.data[action]?.let {
             try {
                 when (Action.valueOf(it)) {
@@ -62,7 +57,24 @@ class FCMService : FirebaseMessagingService() {
                 handleException()
             }
         }
+        textMessageReceived(message)
     }
+
+    private fun textMessageReceived(message: RemoteMessage) {
+        val userId = AppAuth.getInstance().state.value?.id.toString()
+
+        val messageData = gson.fromJson(
+            message.data[content],
+            TextNotification::class.java
+        )
+
+        when (messageData.recipientId) {
+            null,
+            userId -> handleTextNotification(messageData.content)
+            else -> AppAuth.getInstance().sendPushToken()
+        }
+    }
+
 
     override fun onNewToken(token: String) {
         AppAuth.getInstance().sendPushToken(token)
@@ -78,13 +90,22 @@ class FCMService : FirebaseMessagingService() {
         )
     }
 
-    private fun handleNewPost(content: NewPost){
+    private fun handleNewPost(content: NewPost) {
         makeNotificationWithBigText(
             getString(
                 R.string.notification_new_post,
                 content.userName,
-               // content.postText.take(15)+"..."
+                // content.postText.take(15)+"..."
             ), content.postText
+        )
+    }
+
+    private fun handleTextNotification(content: String?) {
+        makeNotification(
+            getString(
+                R.string.notification_new,
+                content
+            )
         )
     }
 
@@ -107,9 +128,11 @@ class FCMService : FirebaseMessagingService() {
         val notification = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(title)
-            .setContentText(postText.take(20)+"...")
-            .setStyle(NotificationCompat.BigTextStyle()
-                .bigText(postText))
+            .setContentText(postText.take(20) + "...")
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText(postText)
+            )
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .build()
 
@@ -122,6 +145,11 @@ enum class Action {
     LIKE,
     NEWPOST,
 }
+
+data class TextNotification(
+    val recipientId: String?,
+    val content: String
+)
 
 data class Like(
     val userId: Long,
