@@ -9,7 +9,7 @@ import ru.netology.nmedia.Attachment
 import ru.netology.nmedia.AttachmentType
 import ru.netology.nmedia.Media
 import ru.netology.nmedia.Post
-import ru.netology.nmedia.api.PostsApi
+import ru.netology.nmedia.api.Api
 import ru.netology.nmedia.dao.PostDao
 import ru.netology.nmedia.dao.PostEntity
 import ru.netology.nmedia.dao.toDto
@@ -26,7 +26,7 @@ class PostRepositoryImpl(
     override fun getNewerCount(id: Long): Flow<Int> = flow {
         delay(10_000)
         while (true) {
-            val response = PostsApi.retrofitService.getNewer(id)
+            val response = Api.retrofitService.getNewer(id)
             val newPosts = response.body() ?: error("Empty response")
             postDao.insert(newPosts.toEntity(false))
             emit(newPosts.size)
@@ -39,7 +39,7 @@ class PostRepositoryImpl(
     }
 
     override suspend fun getAll() {
-        val response = PostsApi.retrofitService.getAll()
+        val response = Api.retrofitService.getAll()
         if (!response.isSuccessful) {
             throw RuntimeException(response.code().toString())
         }
@@ -52,7 +52,7 @@ class PostRepositoryImpl(
     override suspend fun save(post: Post) {
         postDao.save(PostEntity.fromDto(post, true))
         try {
-            val response = PostsApi.retrofitService.save(post)
+            val response = Api.retrofitService.save(post)
             if (!response.isSuccessful) {
                 throw  RuntimeException(
                     response.code().toString()
@@ -69,7 +69,7 @@ class PostRepositoryImpl(
         try {
             val data = MultipartBody.Part.createFormData("file", file.name, file.asRequestBody())
 
-            val response = PostsApi.retrofitService.upload(data)
+            val response = Api.retrofitService.upload(data)
             if (!response.isSuccessful) {
                 throw  RuntimeException(
                     response.code().toString()
@@ -96,9 +96,9 @@ class PostRepositoryImpl(
         postDao.likeById(id)
         try {
             val response = if (willLike)
-                PostsApi.retrofitService.likeById(id)
+                Api.retrofitService.likeById(id)
             else
-                PostsApi.retrofitService.dislikeById(id)
+                Api.retrofitService.dislikeById(id)
             if (!response.isSuccessful) {
                 postDao.likeById(id)
                 throw RuntimeException(response.code().toString())
@@ -110,7 +110,6 @@ class PostRepositoryImpl(
         }
     }
 
-
     override suspend fun shareById(id: Long) {
         //TODO
     }
@@ -119,7 +118,7 @@ class PostRepositoryImpl(
         val removed = postDao.getById(id)
         postDao.removeById(id)
         try {
-            val response = PostsApi.retrofitService.removeById(id)
+            val response = Api.retrofitService.removeById(id)
             if (!response.isSuccessful) {
                 postDao.insert(removed)
                 throw RuntimeException(response.code().toString())
