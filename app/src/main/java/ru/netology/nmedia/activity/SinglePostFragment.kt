@@ -6,33 +6,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.Post
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.activity.PictureFragment.Companion.urlArg
 import ru.netology.nmedia.databinding.FragmentSinglePostBinding
-import ru.netology.nmedia.di.DependencyContainer
 import ru.netology.nmedia.utils.LongArg
-import ru.netology.nmedia.viemodel.PostViewModel
-import ru.netology.nmedia.viemodel.ViewModelFactory
 import ru.netology.nmedia.viewholder.OnInteractionListener
 import ru.netology.nmedia.viewholder.PostViewHolder
+import ru.netology.nmedia.viewmodel.PostViewModel
 
+@AndroidEntryPoint
 class SinglePostFragment : Fragment() {
-    private val dependencyContainer = DependencyContainer.getInstance()
-    val viewModel by viewModels<PostViewModel>(
-        ownerProducer = ::requireParentFragment,
-        factoryProducer = {
-            ViewModelFactory(
-                dependencyContainer.repository,
-                dependencyContainer.appAuth,
-                dependencyContainer.apiService
-            )
-        }
-    )
+
+    private val viewModel: PostViewModel by activityViewModels()
 
     private val interactionListener = object : OnInteractionListener {
 

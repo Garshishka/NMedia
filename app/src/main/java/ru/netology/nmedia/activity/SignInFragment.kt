@@ -7,26 +7,22 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.R
+import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.FragmentSignInBinding
-import ru.netology.nmedia.di.DependencyContainer
-import ru.netology.nmedia.viemodel.SignInViewModel
-import ru.netology.nmedia.viemodel.ViewModelFactory
+import ru.netology.nmedia.viewmodel.SignInViewModel
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SignInFragment : Fragment() {
-    private val dependencyContainer = DependencyContainer.getInstance()
+    @Inject
+    lateinit var appAuth: AppAuth
+
     lateinit var binding: FragmentSignInBinding
-    val viewModel by viewModels<SignInViewModel>(
-        ownerProducer = ::requireParentFragment,
-        factoryProducer = {
-            ViewModelFactory(
-                dependencyContainer.repository,
-                dependencyContainer.appAuth,
-                dependencyContainer.apiService
-            )
-        })
+    private val viewModel: SignInViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,7 +53,7 @@ class SignInFragment : Fragment() {
         }
 
         viewModel.signInRight.observe(viewLifecycleOwner){
-            dependencyContainer.appAuth.setAuth(it.id, it.token)
+            appAuth.setAuth(it.id, it.token)
             goBack()
         }
 

@@ -9,34 +9,31 @@ import androidx.core.net.toFile
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.R
+import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.FragmentNewPostBinding
-import ru.netology.nmedia.di.DependencyContainer
 import ru.netology.nmedia.utils.AndroidUtils
 import ru.netology.nmedia.utils.StringArg
-import ru.netology.nmedia.viemodel.PostViewModel
-import ru.netology.nmedia.viemodel.ViewModelFactory
+import ru.netology.nmedia.viewmodel.PostViewModel
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class NewPostFragment : Fragment() {
-    private val dependencyContainer = DependencyContainer.getInstance()
+    @Inject
+    lateinit var appAuth: AppAuth
+
+    private val viewModel: PostViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val viewModel by viewModels<PostViewModel>(
-            ownerProducer = ::requireParentFragment,
-            factoryProducer = {
-                ViewModelFactory(
-                    dependencyContainer.repository,
-                    dependencyContainer.appAuth,
-                    dependencyContainer.apiService
-                )
-            })
         val isEditing = arguments?.textArg != null
         val binding = FragmentNewPostBinding.inflate(inflater, container, false)
         val contract =
@@ -134,7 +131,7 @@ class NewPostFragment : Fragment() {
         }
 
         binding.logOutButton.setOnClickListener {
-            dependencyContainer.appAuth.removeAuth()
+            appAuth.removeAuth()
             findNavController().navigateUp()
         }
         return binding.root

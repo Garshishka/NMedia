@@ -1,14 +1,17 @@
-package ru.netology.nmedia.viemodel
+package ru.netology.nmedia.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.netology.nmedia.api.ApiService
 import ru.netology.nmedia.auth.AuthPair
 import ru.netology.nmedia.utils.SingleLiveEvent
+import javax.inject.Inject
 
-class SignInViewModel(
+@HiltViewModel
+class SignInViewModel @Inject constructor(
     private val apiService: ApiService
 ) : ViewModel(){
     private val _signInError = SingleLiveEvent<String>()

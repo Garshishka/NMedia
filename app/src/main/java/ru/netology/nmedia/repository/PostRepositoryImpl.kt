@@ -15,8 +15,9 @@ import ru.netology.nmedia.dao.PostEntity
 import ru.netology.nmedia.dao.toDto
 import ru.netology.nmedia.dao.toEntity
 import java.io.File
+import javax.inject.Inject
 
-class PostRepositoryImpl(
+class PostRepositoryImpl @Inject constructor(
     private val postDao: PostDao,
     private val apiService: ApiService
 ) : PostRepository {
