@@ -13,20 +13,30 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.material.snackbar.Snackbar
-import ru.netology.nmedia.PostViewModel
 import ru.netology.nmedia.R
-import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.FragmentNewPostBinding
+import ru.netology.nmedia.di.DependencyContainer
 import ru.netology.nmedia.utils.AndroidUtils
 import ru.netology.nmedia.utils.StringArg
+import ru.netology.nmedia.viemodel.PostViewModel
+import ru.netology.nmedia.viemodel.ViewModelFactory
 
 class NewPostFragment : Fragment() {
+    private val dependencyContainer = DependencyContainer.getInstance()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val viewModel by viewModels<PostViewModel>(ownerProducer = ::requireParentFragment)
+        val viewModel by viewModels<PostViewModel>(
+            ownerProducer = ::requireParentFragment,
+            factoryProducer = {
+                ViewModelFactory(
+                    dependencyContainer.repository,
+                    dependencyContainer.appAuth,
+                    dependencyContainer.apiService
+                )
+            })
         val isEditing = arguments?.textArg != null
         val binding = FragmentNewPostBinding.inflate(inflater, container, false)
         val contract =
@@ -124,7 +134,7 @@ class NewPostFragment : Fragment() {
         }
 
         binding.logOutButton.setOnClickListener {
-            AppAuth.getInstance().removeAuth()
+            dependencyContainer.appAuth.removeAuth()
             findNavController().navigateUp()
         }
         return binding.root

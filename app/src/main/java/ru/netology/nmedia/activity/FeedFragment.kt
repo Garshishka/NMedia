@@ -12,21 +12,32 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.Post
-import ru.netology.nmedia.PostViewModel
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.activity.PictureFragment.Companion.urlArg
 import ru.netology.nmedia.activity.SinglePostFragment.Companion.idArg
 import ru.netology.nmedia.databinding.FragmentFeedBinding
+import ru.netology.nmedia.di.DependencyContainer
 import ru.netology.nmedia.model.FeedModelState
+import ru.netology.nmedia.viemodel.PostViewModel
+import ru.netology.nmedia.viemodel.ViewModelFactory
 import ru.netology.nmedia.viewholder.OnInteractionListener
 import ru.netology.nmedia.viewholder.PostsAdapter
 
 
 class FeedFragment : Fragment() {
-
+    private val dependencyContainer= DependencyContainer.getInstance()
     lateinit var binding: FragmentFeedBinding
-    val viewModel by viewModels<PostViewModel>(ownerProducer = ::requireParentFragment)
+    val viewModel by viewModels<PostViewModel>(
+        ownerProducer = ::requireParentFragment,
+        factoryProducer = {
+            ViewModelFactory(
+                dependencyContainer.repository,
+                dependencyContainer.appAuth,
+                dependencyContainer.apiService
+            )
+        }
+    )
 
     private val interactionListener = object : OnInteractionListener {
 

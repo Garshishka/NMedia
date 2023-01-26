@@ -14,14 +14,24 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.messaging.FirebaseMessaging
-import ru.netology.nmedia.AuthViewModel
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
-import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.ActivityAppBinding
+import ru.netology.nmedia.di.DependencyContainer
+import ru.netology.nmedia.viemodel.AuthViewModel
+import ru.netology.nmedia.viemodel.ViewModelFactory
 
 class AppActivity : AppCompatActivity() {
-    private val authViewModel: AuthViewModel by viewModels()
+    private val dependencyContainer = DependencyContainer.getInstance()
+    private val authViewModel: AuthViewModel by viewModels(
+        factoryProducer = {
+            ViewModelFactory(
+                dependencyContainer.repository,
+                dependencyContainer.appAuth,
+                dependencyContainer.apiService
+            )
+        }
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,7 +83,7 @@ class AppActivity : AppCompatActivity() {
                 if (findNavController(R.id.fragment_container).currentDestination?.id == R.id.newPostFragment) {
                     false
                 } else {
-                    AppAuth.getInstance().removeAuth()
+                    dependencyContainer.appAuth.removeAuth()
                     true
                 }
             }

@@ -9,7 +9,7 @@ import ru.netology.nmedia.Attachment
 import ru.netology.nmedia.AttachmentType
 import ru.netology.nmedia.Media
 import ru.netology.nmedia.Post
-import ru.netology.nmedia.api.Api
+import ru.netology.nmedia.api.ApiService
 import ru.netology.nmedia.dao.PostDao
 import ru.netology.nmedia.dao.PostEntity
 import ru.netology.nmedia.dao.toDto
@@ -17,16 +17,18 @@ import ru.netology.nmedia.dao.toEntity
 import java.io.File
 
 class PostRepositoryImpl(
-    private val postDao: PostDao
+    private val postDao: PostDao,
+    private val apiService: ApiService
 ) : PostRepository {
 
-    override val data = postDao.getAll().map(List<PostEntity>::toDto)
+    override val data = postDao.getAll()
+        .map(List<PostEntity>::toDto)
         .flowOn(Dispatchers.Default)
 
     override fun getNewerCount(id: Long): Flow<Int> = flow {
         delay(10_000)
         while (true) {
-            val response = Api.retrofitService.getNewer(id)
+            val response = apiService.getNewer(id)
             val newPosts = response.body() ?: error("Empty response")
             postDao.insert(newPosts.toEntity(false))
             emit(newPosts.size)
@@ -39,7 +41,7 @@ class PostRepositoryImpl(
     }
 
     override suspend fun getAll() {
-        val response = Api.retrofitService.getAll()
+        val response = apiService.getAll()
         if (!response.isSuccessful) {
             throw RuntimeException(response.code().toString())
         }
@@ -52,7 +54,7 @@ class PostRepositoryImpl(
     override suspend fun save(post: Post) {
         postDao.save(PostEntity.fromDto(post, true))
         try {
-            val response = Api.retrofitService.save(post)
+            val response = apiService.save(post)
             if (!response.isSuccessful) {
                 throw  RuntimeException(
                     response.code().toString()
@@ -69,7 +71,7 @@ class PostRepositoryImpl(
         try {
             val data = MultipartBody.Part.createFormData("file", file.name, file.asRequestBody())
 
-            val response = Api.retrofitService.upload(data)
+            val response = apiService.upload(data)
             if (!response.isSuccessful) {
                 throw  RuntimeException(
                     response.code().toString()
@@ -96,9 +98,9 @@ class PostRepositoryImpl(
         postDao.likeById(id)
         try {
             val response = if (willLike)
-                Api.retrofitService.likeById(id)
+                apiService.likeById(id)
             else
-                Api.retrofitService.dislikeById(id)
+                apiService.dislikeById(id)
             if (!response.isSuccessful) {
                 postDao.likeById(id)
                 throw RuntimeException(response.code().toString())
@@ -118,7 +120,7 @@ class PostRepositoryImpl(
         val removed = postDao.getById(id)
         postDao.removeById(id)
         try {
-            val response = Api.retrofitService.removeById(id)
+            val response = apiService.removeById(id)
             if (!response.isSuccessful) {
                 postDao.insert(removed)
                 throw RuntimeException(response.code().toString())
