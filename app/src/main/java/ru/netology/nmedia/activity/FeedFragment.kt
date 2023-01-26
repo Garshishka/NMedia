@@ -8,11 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.Post
-import ru.netology.nmedia.PostViewModel
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.activity.PictureFragment.Companion.urlArg
@@ -21,12 +21,12 @@ import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.model.FeedModelState
 import ru.netology.nmedia.viewholder.OnInteractionListener
 import ru.netology.nmedia.viewholder.PostsAdapter
+import ru.netology.nmedia.viewmodel.PostViewModel
 
-
+@AndroidEntryPoint
 class FeedFragment : Fragment() {
-
+    private val viewModel: PostViewModel by activityViewModels()
     lateinit var binding: FragmentFeedBinding
-    val viewModel by viewModels<PostViewModel>(ownerProducer = ::requireParentFragment)
 
     private val interactionListener = object : OnInteractionListener {
 
