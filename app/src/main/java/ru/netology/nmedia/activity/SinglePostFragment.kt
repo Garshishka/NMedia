@@ -7,9 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import ru.netology.nmedia.Post
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
@@ -18,6 +20,7 @@ import ru.netology.nmedia.databinding.FragmentSinglePostBinding
 import ru.netology.nmedia.utils.LongArg
 import ru.netology.nmedia.viewholder.OnInteractionListener
 import ru.netology.nmedia.viewholder.PostViewHolder
+import ru.netology.nmedia.viewholder.PostsAdapter
 import ru.netology.nmedia.viewmodel.PostViewModel
 
 @AndroidEntryPoint
@@ -84,13 +87,26 @@ class SinglePostFragment : Fragment() {
 
         val findId = arguments?.idArg
 
-        viewModel.data.observe(viewLifecycleOwner) { feedModel ->
+        val adapter = PostsAdapter(interactionListener)
+
+
+        lifecycleScope.launchWhenCreated {
+            viewModel.data.collectLatest {
+                val post = adapter.snapshot().items.find { it.id == findId } ?: run {
+                    findNavController().navigateUp()
+                    return@collectLatest
+                }
+                viewHolder.bind(post)
+            }
+        }
+
+        /*viewModel.data.observe(viewLifecycleOwner) { feedModel ->
             val post = feedModel.posts.find { it.id == findId } ?: run {
                 findNavController().navigateUp()
                 return@observe
             }
             viewHolder.bind(post)
-        }
+        }*/
 
         viewModel.postsRemoveError.observe(viewLifecycleOwner) {
             val id = it.second
@@ -99,7 +115,7 @@ class SinglePostFragment : Fragment() {
                 getString(R.string.specific_edit_error, it.first),
                 Snackbar.LENGTH_LONG
             )
-                .setAction("Retry"){
+                .setAction("Retry") {
                     viewModel.removeById(id)
                 }
                 .show()
@@ -113,8 +129,8 @@ class SinglePostFragment : Fragment() {
                 getString(R.string.specific_edit_error, it.first),
                 Snackbar.LENGTH_LONG
             )
-                .setAction("Retry"){
-                    viewModel.likeById(id,willLike)
+                .setAction("Retry") {
+                    viewModel.likeById(id, willLike)
                 }
                 .show()
         }
