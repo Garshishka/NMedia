@@ -1,16 +1,22 @@
 package ru.netology.nmedia.viewmodel
 
 import android.net.Uri
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.netology.nmedia.PhotoModel
 import ru.netology.nmedia.Post
 import ru.netology.nmedia.auth.AppAuth
-import ru.netology.nmedia.model.FeedModel
 import ru.netology.nmedia.model.FeedModelState
 import ru.netology.nmedia.repository.PostRepository
 import ru.netology.nmedia.utils.SingleLiveEvent
@@ -33,21 +39,20 @@ class PostViewModel @Inject constructor(
     appAuth: AppAuth,
 ) : ViewModel() {
     val edited = MutableLiveData(empty)
-    val data: LiveData<FeedModel> = appAuth
+    val data: Flow<PagingData<Post>> = appAuth
         .state
         .map { it?.id }
         .flatMapLatest { id ->
             repository.data
-                .map { posts ->
-                    FeedModel(posts.map { it.copy(ownedByMe = it.authorId == id) }, posts.isEmpty())
+                .map { posts -> posts.map { it.copy(ownedByMe = it.authorId == id) }
                 }
-        }.asLiveData(Dispatchers.Default)
+        }.flowOn(Dispatchers.Default)
 
-    val newerCount: LiveData<Int> = data.switchMap {
-        val newerId = it.posts.firstOrNull()?.id ?: 0L
+    /*val newerCount: LiveData<Int> =         data.switchMap {
+        val newerId = it it.posts.firstOrNull()?.id ?: 0L
         repository.getNewerCount(newerId)
             .asLiveData()
-    }
+    }*/
 
     private val _dataState = MutableLiveData<FeedModelState>(FeedModelState.Idle)
     val dataState: LiveData<FeedModelState>
