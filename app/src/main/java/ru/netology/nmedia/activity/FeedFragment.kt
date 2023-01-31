@@ -23,11 +23,13 @@ import ru.netology.nmedia.activity.SinglePostFragment.Companion.idArg
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.viewholder.OnInteractionListener
 import ru.netology.nmedia.viewholder.PostsAdapter
+import ru.netology.nmedia.viewmodel.AuthViewModel
 import ru.netology.nmedia.viewmodel.PostViewModel
 
 @AndroidEntryPoint
 class FeedFragment : Fragment() {
     private val viewModel: PostViewModel by activityViewModels()
+    private val authViewModel: AuthViewModel by activityViewModels()
     lateinit var binding: FragmentFeedBinding
 
     private val interactionListener = object : OnInteractionListener {
@@ -102,9 +104,27 @@ class FeedFragment : Fragment() {
 
 
     private fun subscribe() {
+
         lifecycleScope.launchWhenCreated {
             viewModel.data.collectLatest {
                 adapter.submitData(it)
+            }
+        }
+
+        lifecycleScope.launchWhenCreated {
+            adapter.loadStateFlow.collectLatest {
+                binding.swiper.isRefreshing =
+                    it.refresh is LoadState.Loading
+                            || it.append is LoadState.Loading
+                            || it.prepend is LoadState.Loading
+            }
+        }
+
+        authViewModel.state.observe(viewLifecycleOwner){
+            var authorized : Long? = -1L
+            if (it?.id != authorized){
+                authorized = it?.id
+                adapter.refresh()
             }
         }
 
@@ -118,29 +138,7 @@ class FeedFragment : Fragment() {
             println("Newer count $it")
         }*/
 
-            /*viewModel.dataState.observe(viewLifecycleOwner) { state ->
-            binding.fab.isVisible = state is FeedModelState.Idle
-            binding.swiper.isRefreshing = state is FeedModelState.Refreshing
-            binding.loading.isVisible = state is FeedModelState.Loading
-            if (state is FeedModelState.Error) {
-                Snackbar.make(
-                    binding.root,
-                    getString(R.string.specific_load_error, "some error"),//viewModel.data.value?.errorText),
-                    Snackbar.LENGTH_LONG
-                )
-                    .setAction(R.string.retry) {
-                        viewModel.load()
-                    }
-                    .show()
-            }
-        }*/
-
-        viewModel.postCreated.observe(viewLifecycleOwner) {
-            //binding.fab.isVisible = true
-        }
-
         viewModel.postCreatedError.observe(viewLifecycleOwner) {
-            // binding.fab.isVisible = false
             Snackbar.make(
                 binding.root,
                 getString(R.string.specific_posting_error, it),
@@ -177,15 +175,6 @@ class FeedFragment : Fragment() {
                     viewModel.likeById(id, willLike)
                 }
                 .show()
-        }
-
-        lifecycleScope.launchWhenCreated {
-            adapter.loadStateFlow.collectLatest {
-                binding.swiper.isRefreshing =
-                it.refresh is LoadState.Loading
-                        || it.append is LoadState.Loading
-                        || it.prepend is LoadState.Loading
-            }
         }
 
         binding.swiper.setOnRefreshListener {
