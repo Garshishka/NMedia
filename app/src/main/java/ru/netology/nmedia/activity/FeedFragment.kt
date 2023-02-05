@@ -120,23 +120,21 @@ class FeedFragment : Fragment() {
             }
         }
 
-        authViewModel.state.observe(viewLifecycleOwner){
-            var authorized : Long? = -1L
-            if (it?.id != authorized){
-                authorized = it?.id
+        authViewModel.state.observe(viewLifecycleOwner) {
+            if (it?.id != -1L) {
                 adapter.refresh()
             }
         }
 
-       /* viewModel.newerCount.observe(viewLifecycleOwner) {
-            if (it > 0) {
-                binding.newerPostsButton.isVisible = true
-                binding.newerPostsButton.text = getString(R.string.newer_posts, it.toString())
-            } else {
-                binding.newerPostsButton.isVisible = false
-            }
-            println("Newer count $it")
-        }*/
+        /* viewModel.newerCount.observe(viewLifecycleOwner) {
+             if (it > 0) {
+                 binding.newerPostsButton.isVisible = true
+                 binding.newerPostsButton.text = getString(R.string.newer_posts, it.toString())
+             } else {
+                 binding.newerPostsButton.isVisible = false
+             }
+             println("Newer count $it")
+         }*/
 
         viewModel.postCreatedError.observe(viewLifecycleOwner) {
             Snackbar.make(
