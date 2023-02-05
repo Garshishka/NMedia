@@ -1,4 +1,4 @@
-package ru.netology.nmedia.dao
+package ru.netology.nmedia.entity
 
 import androidx.room.Embedded
 import androidx.room.Entity
@@ -73,5 +73,5 @@ data class AttachmentEmbedabble(
 }
 
 fun List<PostEntity>.toDto(): List<Post> = map(PostEntity::toDto)
-fun List<Post>.toEntity(show: Boolean = true): List<PostEntity> = map(PostEntity::fromDto)
+fun List<Post>.toEntity(show: Boolean = true): List<PostEntity> = map(PostEntity.Companion::fromDto)
     .map { it.copy(show = show) }
