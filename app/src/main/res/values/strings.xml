@@ -26,7 +26,7 @@
     <string name="specific_load_error">Error loading\nError code:%1$s.</string>
     <string name="specific_edit_error">Error:%1$s.\nTry again</string>
     <string name="specific_posting_error">Error code:%1$s\nTry sending the message again</string>
-    <string name="retry">Retry loading</string>
+    <string name="retry">Retry</string>
     <string name="posts_empty">No posts exists</string>
     <string name="not_on_server_yet">This post not on server yet</string>
     <string name="newer_posts">There are %1$s new posts</string>

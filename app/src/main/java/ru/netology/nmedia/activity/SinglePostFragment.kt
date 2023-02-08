@@ -16,11 +16,11 @@ import ru.netology.nmedia.Post
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.activity.PictureFragment.Companion.urlArg
+import ru.netology.nmedia.adapter.PostsAdapter
 import ru.netology.nmedia.databinding.FragmentSinglePostBinding
 import ru.netology.nmedia.utils.LongArg
 import ru.netology.nmedia.viewholder.OnInteractionListener
 import ru.netology.nmedia.viewholder.PostViewHolder
-import ru.netology.nmedia.viewholder.PostsAdapter
 import ru.netology.nmedia.viewmodel.PostViewModel
 
 @AndroidEntryPoint
@@ -96,7 +96,7 @@ class SinglePostFragment : Fragment() {
                     findNavController().navigateUp()
                     return@collectLatest
                 }
-                viewHolder.bind(post)
+                viewHolder.bind(post as Post)
             }
         }
 
