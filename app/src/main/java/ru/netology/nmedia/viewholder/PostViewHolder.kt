@@ -1,15 +1,10 @@
 package ru.netology.nmedia.viewholder
 
 import android.view.View
-import android.widget.ImageView
 import android.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import ru.netology.nmedia.AttachmentType
-import ru.netology.nmedia.BuildConfig
-import ru.netology.nmedia.Post
-import ru.netology.nmedia.R
+import ru.netology.nmedia.*
 import ru.netology.nmedia.databinding.PostLayoutBinding
 
 
@@ -75,15 +70,6 @@ class PostViewHolder(
         }
     }
 
-    private fun ImageView.load(url: String, willCrop: Boolean = false, timeout: Int = 10_000) {
-        Glide.with(this)
-            .load(url)
-            .apply { if (willCrop) circleCrop() }
-            .error(R.drawable.ic_baseline_error_outline_48)
-            .placeholder(R.drawable.ic_baseline_downloading_48)
-            .timeout(timeout)
-            .into(this)
-    }
 
     private fun formattingBigNumbers(number: Long): String {
         return when (number) {
