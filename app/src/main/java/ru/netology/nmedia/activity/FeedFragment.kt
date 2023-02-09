@@ -119,8 +119,6 @@ class FeedFragment : Fragment() {
             adapter.loadStateFlow.collectLatest {
                 binding.swiper.isRefreshing =
                     it.refresh is LoadState.Loading
-                            || it.append is LoadState.Loading
-                            || it.prepend is LoadState.Loading
             }
         }
 
