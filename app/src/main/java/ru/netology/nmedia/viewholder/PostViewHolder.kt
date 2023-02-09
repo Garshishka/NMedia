@@ -1,22 +1,29 @@
 package ru.netology.nmedia.viewholder
 
+import android.os.Build
 import android.view.View
 import android.widget.PopupMenu
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nmedia.*
 import ru.netology.nmedia.databinding.PostLayoutBinding
+import java.time.Instant
+import java.util.*
 
 
 class PostViewHolder(
     private val binding: PostLayoutBinding,
     private val onInteractionListener: OnInteractionListener
 ) : RecyclerView.ViewHolder(binding.root) {
+
+    @RequiresApi(Build.VERSION_CODES.O)
     fun bind(post: Post) {
         binding.apply {
             wholePost.setOnClickListener { onInteractionListener.onPostClick(post) }
             author.text = post.author
-            published.text = post.published
+            val publishedTime = post.published.toLong()
+            published.text = Date.from(Instant.ofEpochSecond(publishedTime)).toString()
             content.text = post.content
             like.text = formattingBigNumbers(post.likes)
             like.isChecked = post.likedByMe

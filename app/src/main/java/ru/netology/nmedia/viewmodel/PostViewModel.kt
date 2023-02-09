@@ -36,6 +36,11 @@ private val empty = Post(
 
 private val noPhoto = PhotoModel(null, null)
 
+sealed class UiItem {
+    data class FeedItem(val feedItem: FeedItem) : UiItem()
+    data class SeparatorItem(val description: String) : UiItem()
+}
+
 @HiltViewModel
 class PostViewModel @Inject constructor(
     private val repository: PostRepository,
