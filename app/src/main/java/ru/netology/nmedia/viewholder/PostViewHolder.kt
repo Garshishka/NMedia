@@ -6,17 +6,21 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nmedia.*
 import ru.netology.nmedia.databinding.PostLayoutBinding
+import java.sql.Timestamp
+import java.util.*
 
 
 class PostViewHolder(
     private val binding: PostLayoutBinding,
     private val onInteractionListener: OnInteractionListener
 ) : RecyclerView.ViewHolder(binding.root) {
+
     fun bind(post: Post) {
         binding.apply {
             wholePost.setOnClickListener { onInteractionListener.onPostClick(post) }
             author.text = post.author
-            published.text = post.published
+            val publishedTime = Timestamp(post.published.toLong()*1_000)
+            published.text = Date(publishedTime.time).toString()
             content.text = post.content
             like.text = formattingBigNumbers(post.likes)
             like.isChecked = post.likedByMe

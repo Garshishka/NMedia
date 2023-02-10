@@ -4,16 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
-import ru.netology.nmedia.Ad
-import ru.netology.nmedia.FeedItem
-import ru.netology.nmedia.Post
-import ru.netology.nmedia.R
+import ru.netology.nmedia.*
 import ru.netology.nmedia.databinding.CardAdBinding
+import ru.netology.nmedia.databinding.CardSeparatorBinding
 import ru.netology.nmedia.databinding.PostLayoutBinding
-import ru.netology.nmedia.viewholder.AdViewHolder
-import ru.netology.nmedia.viewholder.OnInteractionListener
-import ru.netology.nmedia.viewholder.PostDiffCallBack
-import ru.netology.nmedia.viewholder.PostViewHolder
+import ru.netology.nmedia.viewholder.*
 
 class PostsAdapter(
     private val onInteractionListener: OnInteractionListener
@@ -23,6 +18,7 @@ class PostsAdapter(
         when (getItem(position)) {
             is Ad -> R.layout.card_ad
             is Post -> R.layout.post_layout
+            is DateSeparator -> R.layout.card_separator
             else -> error("unknown view type ")
         }
 
@@ -38,6 +34,11 @@ class PostsAdapter(
                     CardAdBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 return AdViewHolder(binding)
             }
+            R.layout.card_separator ->{
+                val binding =
+                    CardSeparatorBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                return DateSeparatorViewHolder(binding)
+            }
             else -> error("unknown view type: $viewType")
         }
     }
@@ -46,6 +47,7 @@ class PostsAdapter(
         when (val item = getItem(position)) {
             is Ad -> (holder as? AdViewHolder)?.bind(item)
             is Post -> (holder as? PostViewHolder)?.bind(item)
+            is DateSeparator -> (holder as? DateSeparatorViewHolder)?.bind(item)
             else -> error("unkown view type ")
         }
     }

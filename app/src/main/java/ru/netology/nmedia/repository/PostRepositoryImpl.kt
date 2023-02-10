@@ -34,13 +34,32 @@ class PostRepositoryImpl @Inject constructor(
         remoteMediator = PostRemoteMediator(apiService, postDao, postRemoteKeyDao, appDb),
     ).flow
         .map {
+            var todaySeparatorNotSet = true
+            var yesterdaySeparatorNotSet = true
+            var lastWeekSeparatorNotSet = true
+
             it.map(PostEntity::toDto)
                 .insertSeparators { previous, next ->
-                    if (previous?.id?.rem(5) == 0L) {
-                        Ad(Random.nextLong(), "figma.jpg")
-                    } else {
-                        null
+                    val timeNext = next?.published?.toLong()
+                    if (timeNext != null) {
+                        val timeDifference = (System.currentTimeMillis() / 1000) - timeNext
+                        println(timeDifference)
+                        if (timeDifference > 60*60*24L && todaySeparatorNotSet) {
+                            todaySeparatorNotSet = false
+                            return@insertSeparators DateSeparator(0, TimeSeparator.TODAY)
+                        }
+                        if (timeDifference > 2*60*60*24L && yesterdaySeparatorNotSet) {
+                            yesterdaySeparatorNotSet = false
+                            return@insertSeparators DateSeparator(1, TimeSeparator.YESTERDAY)
+                        }
+                        if (timeDifference > 3*60*60*24L && lastWeekSeparatorNotSet) {
+                            lastWeekSeparatorNotSet = false
+                            return@insertSeparators DateSeparator(2, TimeSeparator.LASTWEEK)
+                        }
                     }
+                    if (previous?.id?.rem(5) == 0L) {
+                        return@insertSeparators Ad(Random.nextLong(), "figma.jpg")
+                    } else{null}
                 }
         }
 
@@ -88,7 +107,8 @@ class PostRepositoryImpl @Inject constructor(
 
     private suspend fun upload(file: File): Media {
         try {
-            val data = MultipartBody.Part.createFormData("file", file.name, file.asRequestBody())
+            val data =
+                MultipartBody.Part.createFormData("file", file.name, file.asRequestBody())
 
             val response = apiService.upload(data)
             if (!response.isSuccessful) {
