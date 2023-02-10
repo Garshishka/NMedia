@@ -1,14 +1,12 @@
 package ru.netology.nmedia.viewholder
 
-import android.os.Build
 import android.view.View
 import android.widget.PopupMenu
-import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nmedia.*
 import ru.netology.nmedia.databinding.PostLayoutBinding
-import java.time.Instant
+import java.sql.Timestamp
 import java.util.*
 
 
@@ -17,13 +15,12 @@ class PostViewHolder(
     private val onInteractionListener: OnInteractionListener
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun bind(post: Post) {
         binding.apply {
             wholePost.setOnClickListener { onInteractionListener.onPostClick(post) }
             author.text = post.author
-            val publishedTime = post.published.toLong()
-            published.text = Date.from(Instant.ofEpochSecond(publishedTime)).toString()
+            val publishedTime = Timestamp(post.published.toLong()*1_000)
+            published.text = Date(publishedTime.time).toString()
             content.text = post.content
             like.text = formattingBigNumbers(post.likes)
             like.isChecked = post.likedByMe

@@ -27,6 +27,17 @@ data class Ad(
     val image: String,
 ) : FeedItem
 
+data class DateSeparator(
+    override val id: Long,
+    val time: TimeSeparator
+) : FeedItem
+
+enum class TimeSeparator{
+    TODAY,
+    YESTERDAY,
+    LASTWEEK
+}
+
 data class PhotoModel(val uri: Uri?, val file: File?)
 data class Media(val id: String)
 
