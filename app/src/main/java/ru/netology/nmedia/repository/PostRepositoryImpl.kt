@@ -37,13 +37,13 @@ class PostRepositoryImpl @Inject constructor(
             var todaySeparatorNotSet = true
             var yesterdaySeparatorNotSet = true
             var lastWeekSeparatorNotSet = true
+            val timeNow = System.currentTimeMillis() / 1000
 
             it.map(PostEntity::toDto)
                 .insertSeparators { previous, next ->
                     val timeNext = next?.published?.toLong()
                     if (timeNext != null) {
-                        val timeDifference = (System.currentTimeMillis() / 1000) - timeNext
-                        println(timeDifference)
+                        val timeDifference = timeNow - timeNext
                         if (timeDifference > 60*60*24L && todaySeparatorNotSet) {
                             todaySeparatorNotSet = false
                             return@insertSeparators DateSeparator(0, TimeSeparator.TODAY)
