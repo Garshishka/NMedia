@@ -21,16 +21,15 @@ class PostRemoteMediator(
     private val appDb: AppDb,
 ) : RemoteMediator<Int, PostEntity>() {
 
-    var firstLoad = true
-
     override suspend fun load(
         loadType: LoadType,
         state: PagingState<Int, PostEntity>
     ): MediatorResult {
         try {
+            val maxId = postRemoteKeyDao.max()
             val result = when (loadType) {
                 LoadType.REFRESH -> {
-                    if (firstLoad) {
+                    if (maxId == null) {
                         service.getLatest(state.config.pageSize)
                     } else {
                         val id = postRemoteKeyDao.max() ?: return MediatorResult.Success(false)
@@ -58,8 +57,7 @@ class PostRemoteMediator(
             appDb.withTransaction {
                 when (loadType) {
                     LoadType.REFRESH -> {
-                        if (firstLoad) {
-                            firstLoad = false
+                        if (maxId == null) {
                             postDao.clear()
                             postRemoteKeyDao.insert(
                                 listOf(
